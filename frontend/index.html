@@ -1,0 +1,4933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOSO — Good Food. Big Mood.</title>
+    <meta name="description" content="TOSO Restaurant — Bold flavors, colorful plates, and a whole lot of good vibes. Welcome to TOSO.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --deep-purple: #28134F;
+            --vibrant-purple: #6737C7;
+            --lavender: #A98BE8;
+            --hot-pink: #F34B9B;
+            --coral: #FF665F;
+            --bright-orange: #FFAA22;
+            --lime: #C9F227;
+            --sky-blue: #48B9E8;
+            --off-white: #FFFDF8;
+            --dark-text: #171329;
+            --white: #FFFFFF;
+            --soft-shadow: 0 8px 32px rgba(23, 19, 41, 0.08);
+            --card-shadow: 0 4px 20px rgba(23, 19, 41, 0.06);
+            --font-heading: 'Fredoka', 'Baloo 2', sans-serif;
+            --font-body: 'Nunito', 'DM Sans', sans-serif;
+            --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --radius-sm: 12px;
+            --radius-md: 20px;
+            --radius-lg: 32px;
+            --radius-xl: 48px;
+            --radius-blob: 60% 40% 55% 45% / 45% 55% 40% 60%;
+            --radius-blob2: 40% 60% 50% 50% / 55% 40% 60% 45%;
+            --radius-blob3: 55% 45% 60% 40% / 40% 55% 45% 60%;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--dark-text);
+            background-color: var(--off-white);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            position: relative;
+            width: 100%;
+            max-width: 100vw;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: color var(--transition-smooth);
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        button {
+            cursor: pointer;
+            font-family: var(--font-body);
+            border: none;
+            outline: none;
+            transition: all var(--transition-smooth);
+        }
+
+        input,
+        textarea,
+        select {
+            font-family: var(--font-body);
+            outline: none;
+            border: 2px solid #e8e5f0;
+            border-radius: var(--radius-sm);
+            padding: 14px 18px;
+            font-size: 1rem;
+            transition: all var(--transition-smooth);
+            background: var(--white);
+            width: 100%;
+        }
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: var(--vibrant-purple);
+            box-shadow: 0 0 0 4px rgba(103, 55, 199, 0.08);
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            width: 100%;
+        }
+
+        /* ──────────── SECTION TAG ──────────── */
+        .section-tag {
+            display: inline-block;
+            color: var(--hot-pink);
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            font-family: var(--font-heading);
+            margin-bottom: 4px;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .section-tag::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 3px;
+            background: var(--hot-pink);
+            border-radius: 2px;
+            margin-left: 8px;
+            vertical-align: middle;
+            opacity: 0.6;
+        }
+
+        /* ──────────── ABSTRACT SHAPES SYSTEM ──────────── */
+        .blob {
+            position: absolute;
+            pointer-events: none;
+            z-index: 0;
+            animation: floatBlob 8s ease-in-out infinite;
+        }
+        .blob-pink {
+            background: var(--hot-pink);
+            opacity: 0.35;
+            border-radius: var(--radius-blob);
+            width: 280px;
+            height: 260px;
+            filter: blur(2px);
+        }
+        .blob-orange {
+            background: var(--bright-orange);
+            opacity: 0.4;
+            border-radius: var(--radius-blob2);
+            width: 220px;
+            height: 240px;
+            filter: blur(3px);
+        }
+        .blob-lime {
+            background: var(--lime);
+            opacity: 0.45;
+            border-radius: var(--radius-blob3);
+            width: 200px;
+            height: 210px;
+            filter: blur(1px);
+        }
+        .blob-blue {
+            background: var(--sky-blue);
+            opacity: 0.3;
+            border-radius: var(--radius-blob);
+            width: 180px;
+            height: 190px;
+            filter: blur(2px);
+        }
+        .blob-lavender {
+            background: var(--lavender);
+            opacity: 0.3;
+            border-radius: var(--radius-blob2);
+            width: 240px;
+            height: 220px;
+            filter: blur(4px);
+        }
+        .blob-coral {
+            background: var(--coral);
+            opacity: 0.35;
+            border-radius: var(--radius-blob3);
+            width: 160px;
+            height: 170px;
+            filter: blur(2px);
+        }
+        .dot-circle {
+            position: absolute;
+            pointer-events: none;
+            border-radius: 50%;
+            z-index: 0;
+            animation: floatDot 6s ease-in-out infinite;
+        }
+        .dot-sm {
+            width: 18px;
+            height: 18px;
+        }
+        .dot-md {
+            width: 32px;
+            height: 32px;
+        }
+        .dot-lg {
+            width: 50px;
+            height: 50px;
+        }
+
+        @keyframes floatBlob {
+            0%,
+            100% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+            }
+            25% {
+                transform: translate(12px, -18px) rotate(2deg) scale(1.04);
+            }
+            50% {
+                transform: translate(-8px, 14px) rotate(-3deg) scale(0.96);
+            }
+            75% {
+                transform: translate(-14px, -8px) rotate(1deg) scale(1.02);
+            }
+        }
+        @keyframes floatDot {
+            0%,
+            100% {
+                transform: translateY(0) scale(1);
+            }
+            33% {
+                transform: translateY(-16px) scale(1.15);
+            }
+            66% {
+                transform: translateY(10px) scale(0.9);
+            }
+        }
+        @keyframes floatSlow {
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+            50% {
+                transform: translate(20px, -25px);
+            }
+        }
+        @keyframes wiggle {
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+            25% {
+                transform: rotate(3deg);
+            }
+            75% {
+                transform: rotate(-3deg);
+            }
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.06);
+            }
+        }
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            70% {
+                transform: scale(1.04);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        @keyframes drawSquiggle {
+            from {
+                stroke-dashoffset: 200;
+            }
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+        @keyframes accordionOpen {
+            from {
+                max-height: 0;
+                opacity: 0;
+            }
+            to {
+                max-height: 300px;
+                opacity: 1;
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ──────────── NAVBAR ──────────── */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 16px 0;
+            transition: all var(--transition-smooth);
+            background: transparent;
+            width: 100%;
+        }
+        .navbar.scrolled {
+            background: rgba(255, 253, 248, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 2px 24px rgba(23, 19, 41, 0.08);
+            padding: 10px 0;
+        }
+        .navbar-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            width: 100%;
+        }
+        .nav-logo {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: 0.04em;
+            position: relative;
+            z-index: 1;
+            transition: color var(--transition-smooth);
+        }
+        .navbar.scrolled .nav-logo {
+            color: var(--deep-purple);
+        }
+        .nav-logo-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: var(--lime);
+            border-radius: 50%;
+            margin-left: 2px;
+            animation: pulse 2s ease-in-out infinite;
+            vertical-align: middle;
+            position: relative;
+            top: -8px;
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            padding: 10px 16px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.9);
+            transition: all var(--transition-smooth);
+            white-space: nowrap;
+        }
+        .navbar.scrolled .nav-links a {
+            color: var(--dark-text);
+        }
+        .nav-links a:hover,
+        .nav-links a:focus-visible {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+        .navbar.scrolled .nav-links a:hover,
+        .navbar.scrolled .nav-links a:focus-visible {
+            background: rgba(103, 55, 199, 0.08);
+            color: var(--vibrant-purple);
+        }
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+        .btn-order-nav {
+            background: var(--lime);
+            color: var(--deep-purple);
+            font-weight: 700;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            letter-spacing: 0.01em;
+            white-space: nowrap;
+            transition: all var(--transition-bounce);
+        }
+        .btn-order-nav:hover {
+            background: #ddf030;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(201, 242, 39, 0.4);
+        }
+        .cart-nav-btn {
+            position: relative;
+            background: rgba(255, 255, 255, 0.18);
+            color: #fff;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all var(--transition-smooth);
+            border: none;
+            flex-shrink: 0;
+        }
+        .navbar.scrolled .cart-nav-btn {
+            background: rgba(103, 55, 199, 0.1);
+            color: var(--vibrant-purple);
+        }
+        .cart-nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.06);
+        }
+        .cart-count-badge {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: var(--hot-pink);
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: 700;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: popIn 0.3s ease;
+        }
+        .hamburger {
+            display: none;
+            background: rgba(255, 255, 255, 0.18);
+            color: #fff;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            border: none;
+            transition: all var(--transition-smooth);
+            flex-shrink: 0;
+        }
+        .navbar.scrolled .hamburger {
+            background: rgba(103, 55, 199, 0.1);
+            color: var(--vibrant-purple);
+        }
+        .hamburger:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* ──────────── MOBILE NAV PANEL ──────────── */
+        .mobile-nav-panel {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 85%;
+            max-width: 400px;
+            height: 100vh;
+            background: var(--deep-purple);
+            z-index: 2000;
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            padding: 80px 40px 40px;
+            gap: 8px;
+            overflow-y: auto;
+        }
+        .mobile-nav-panel.open {
+            right: 0;
+        }
+        .mobile-nav-panel a {
+            color: #fff;
+            font-size: 1.4rem;
+            font-weight: 700;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            display: block;
+            font-family: var(--font-heading);
+            transition: all var(--transition-smooth);
+        }
+        .mobile-nav-panel a:hover {
+            color: var(--lime);
+            padding-left: 12px;
+        }
+        .mobile-nav-close {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            border: none;
+        }
+        .mobile-nav-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1500;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        .mobile-nav-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .mobile-nav-blob {
+            position: absolute;
+            bottom: -60px;
+            left: -80px;
+            width: 200px;
+            height: 180px;
+            background: var(--hot-pink);
+            opacity: 0.25;
+            border-radius: var(--radius-blob);
+            pointer-events: none;
+        }
+
+        /* ──────────── HERO ──────────── */
+        .hero {
+            position: relative;
+            background: var(--deep-purple);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            padding: 120px 0 80px;
+            width: 100%;
+        }
+        .hero .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        .hero-blob-1 {
+            top: -80px;
+            left: -60px;
+            width: 350px;
+            height: 320px;
+        }
+        .hero-blob-2 {
+            position: absolute;
+            /* bottom: 25px; */
+            right: -40px;
+            width: 300px;
+            height: 280px;
+            animation-delay: 2s;
+        }
+        .hero-blob-3 {
+            top: 30%;
+            right: 15%;
+            width: 160px;
+            height: 150px;
+            animation-delay: 4s;
+        }
+        .hero-dot-1 {
+            top: 20%;
+            left: 55%;
+            background: var(--lime);
+            animation-delay: 1s;
+        }
+        .hero-dot-2 {
+            bottom: 25%;
+            left: 10%;
+            background: var(--hot-pink);
+            animation-delay: 3s;
+        }
+        .hero-dot-3 {
+            top: 15%;
+            right: 8%;
+            background: var(--sky-blue);
+            animation-delay: 5s;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 3;
+        }
+        .hero-label-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+        .hero-pill {
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.03em;
+            font-family: var(--font-heading);
+            animation: popIn 0.6s ease forwards;
+        }
+        .hero-pill:nth-child(1) {
+            background: var(--hot-pink);
+            color: #fff;
+            animation-delay: 0.1s;
+        }
+        .hero-pill:nth-child(2) {
+            background: var(--lime);
+            color: var(--deep-purple);
+            animation-delay: 0.25s;
+        }
+        .hero-pill:nth-child(3) {
+            background: var(--sky-blue);
+            color: #fff;
+            animation-delay: 0.4s;
+        }
+        .hero-title {
+            font-size: clamp(3rem, 6vw, 5.5rem);
+            color: #fff;
+            line-height: 0.9;
+            margin-bottom: 20px;
+            letter-spacing: -0.03em;
+        }
+        .hero-title .highlight {
+            color: var(--lime);
+            position: relative;
+            display: inline-block;
+        }
+        .hero-title .high {
+            color: #F34B9B;
+        }
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 32px;
+            max-width: 440px;
+            line-height: 1.6;
+        }
+        .hero-btns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+        .btn-primary {
+            background: var(--lime);
+            color: var(--deep-purple);
+            font-weight: 700;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-size: 1.05rem;
+            letter-spacing: 0.01em;
+            transition: all var(--transition-bounce);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary:hover {
+            background: #ddf030;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(201, 242, 39, 0.45);
+        }
+        .btn-secondary {
+            background: transparent;
+            color: #fff;
+            font-weight: 700;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-size: 1.05rem;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            transition: all var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-secondary:hover {
+            border-color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+        .hero-visual {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hero-image-wrapper {
+            position: relative;
+            z-index: 3;
+            border-radius: var(--radius-blob);
+            overflow: hidden;
+            width: 420px;
+            height: 420px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: floatBlob 9s ease-in-out infinite;
+            border: 8px solid #ddd5df36;
+            max-width: 100%;
+        }
+        .hero-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .hero-squiggle {
+            position: absolute;
+            z-index: 4;
+            pointer-events: none;
+        }
+        .hero-squiggle-1 {
+            top: -30px;
+            right: -40px;
+            width: 100px;
+            height: 60px;
+        }
+        .hero-squiggle-2 {
+            bottom: -20px;
+            left: -50px;
+            width: 80px;
+            height: 50px;
+            transform: rotate(15deg);
+        }
+
+        /* ──────────── CURVE TRANSITION ──────────── */
+        .curve-transition {
+            position: relative;
+            height: 60px;
+            background: #28134F;
+            overflow: hidden;
+            margin-top: -5px;
+        }
+        .curve-transition::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: var(--off-white);
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+        }
+
+        /* ──────────── ABOUT ──────────── */
+        .about-section {
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        .about-image-wrap {
+            position: relative;
+            z-index: 2;
+            border-radius: 32% 68% 29% 71% / 57% 46% 54% 43% ;
+            
+            overflow: hidden;
+            box-shadow: var(--soft-shadow);
+            aspect-ratio: 4/5;
+            max-width: 440px;
+        }
+        .about-image-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .about-blob-behind {
+            position: absolute;
+            z-index: 0;
+            top: -40px;
+            left: -40px;
+            width: 200px;
+            height: 200px;
+            background: var(--lavender);
+            opacity: 0.3;
+            border-radius: var(--radius-blob3);
+            animation: floatBlob 7s ease-in-out infinite;
+        }
+        .about-content h2 {
+            font-size: clamp(2.2rem, 4vw, 3.5rem);
+            color: var(--deep-purple);
+            margin-bottom: 16px;
+            line-height: 1.1;
+        }
+        .about-content h2 .accent {
+            color: var(--hot-pink);
+        }
+        .about-content p {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 28px;
+            max-width: 480px;
+            line-height: 1.7;
+        }
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+        .about-stat {
+            text-align: center;
+            background: #fff;
+            padding: 18px 12px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--card-shadow);
+        }
+        .about-stat-num {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--vibrant-purple);
+            line-height: 1;
+        }
+        .about-stat-label {
+            font-size: 0.8rem;
+            color: #777;
+            margin-top: 4px;
+            font-weight: 600;
+        }
+        .about-dot-deco {
+            position: absolute;
+            bottom: 60px;
+            right: 8%;
+            background: var(--bright-orange);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            animation: floatDot 5s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        /* ──────────── SERVICES ──────────── */
+        .services-section {
+            padding: 100px 0;
+            background: var(--deep-purple);
+            position: relative;
+            overflow: hidden;
+            color: #fff;
+            width: 100%;
+             border-top-left-radius: 20%;
+            border-top-right-radius: 20%;
+            
+        }
+        .services-section h2 {
+            text-align: center;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            margin-bottom: 12px;
+            color: #fff;
+            line-height: 1.2;
+        }
+        .services-section .section-subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 48px;
+            font-size: 1.1rem;
+        }
+        .services-section .section-tag {
+            color: var(--lime);
+            display: block;
+            text-align: center;
+        }
+        .services-section .section-tag::after {
+            background: var(--lime);
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            position: relative;
+            z-index: 2;
+        }
+        .service-card {
+            background: #fff;
+            color: var(--dark-text);
+            border-radius: var(--radius-lg);
+            padding: 36px 24px 28px;
+            text-align: center;
+            position: relative;
+            transition: all var(--transition-bounce);
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+        }
+        .service-card:nth-child(1) {
+            transform: rotate(-1.5deg);
+        }
+        .service-card:nth-child(2) {
+            transform: rotate(1deg);
+        }
+        .service-card:nth-child(3) {
+            transform: rotate(-1deg);
+        }
+        .service-card:nth-child(4) {
+            transform: rotate(1.5deg);
+        }
+        .service-card:hover {
+            transform: rotate(0deg) translateY(-8px) !important;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+        }
+        .service-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 16px;
+            transition: all var(--transition-bounce);
+        }
+        .service-card:nth-child(1) .service-icon {
+            background: #fdf2f8;
+            color: var(--hot-pink);
+        }
+        .service-card:nth-child(2) .service-icon {
+            background: #fff7e6;
+            color: var(--bright-orange);
+        }
+        .service-card:nth-child(3) .service-icon {
+            background: #f0fdf4;
+            color: #4dba2c;
+        }
+        .service-card:nth-child(4) .service-icon {
+            background: #eff6ff;
+            color: var(--sky-blue);
+        }
+        .service-card:hover .service-icon {
+            transform: scale(1.1);
+        }
+        .service-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            color: var(--deep-purple);
+        }
+        .service-card p {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.5;
+        }
+        .service-blob-bg {
+            position: absolute;
+            top: -100px;
+            right: -80px;
+            width: 300px;
+            height: 280px;
+            background: var(--vibrant-purple);
+            opacity: 0.2;
+            border-radius: var(--radius-blob);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ──────────── MENU ──────────── */
+        .menu-section {
+            padding: 100px 0;
+            background: var(--off-white);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+        .menu-section h2 {
+            text-align: center;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            color: var(--deep-purple);
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+        .menu-section .section-subtitle {
+            text-align: center;
+            color: #777;
+            margin-bottom: 36px;
+            font-size: 1.05rem;
+        }
+        .menu-filters {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 2;
+        }
+        .menu-filter-btn {
+            padding: 10px 22px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            background: #fff;
+            color: var(--dark-text);
+            border: 2px solid #e8e5f0;
+            transition: all var(--transition-smooth);
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .menu-filter-btn.active {
+            background: var(--vibrant-purple);
+            color: #fff;
+            border-color: var(--vibrant-purple);
+            box-shadow: 0 6px 20px rgba(103, 55, 199, 0.3);
+        }
+        .menu-filter-btn:hover {
+            border-color: var(--vibrant-purple);
+        }
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 28px;
+            position: relative;
+            z-index: 2;
+        }
+        .menu-card {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: all var(--transition-bounce);
+            position: relative;
+            border: 3px solid #c9f22700;
+        }
+       
+        .menu-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 36px rgba(23, 19, 41, 0.12);
+            border: 3px solid #6737C7;
+
+        }
+        .menu-card-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .menu-card:hover .menu-card-img {
+            transform: scale(1.06);
+        }
+        .menu-card-body {
+            padding: 20px;
+        }
+        .menu-card-body h3 {
+            font-size: 1.15rem;
+            color: var(--deep-purple);
+            margin-bottom: 4px;
+        }
+        .menu-card-body .menu-desc {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        .menu-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .menu-price {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--vibrant-purple);
+        }
+        .btn-add {
+            background: var(--lime);
+            color: var(--deep-purple);
+            font-weight: 700;
+            padding: 10px 18px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all var(--transition-bounce);
+            border: none;
+            cursor: pointer;
+        }
+        .btn-add:hover {
+            background: #ddf030;
+            transform: scale(1.05);
+            box-shadow: 0 6px 18px rgba(201, 242, 39, 0.5);
+        }
+        .menu-blob-deco {
+            position: absolute;
+            top: 60px;
+            left: -80px;
+            width: 220px;
+            height: 200px;
+            background: var(--lavender);
+            opacity: 0.2;
+            border-radius: var(--radius-blob2);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ──────────── AMBIENCE ──────────── */
+        .ambience-section {
+            padding: 100px 0;
+            background: #fff;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+        .ambience-section h2 {
+            text-align: center;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            color: var(--deep-purple);
+            margin-bottom: 40px;
+            line-height: 1.2;
+        }
+        .ambience-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            grid-template-rows: auto auto;
+            gap: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        .ambience-item {
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            position: relative;
+            box-shadow: var(--card-shadow);
+            transition: all var(--transition-bounce);
+        }
+        .ambience-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--soft-shadow);
+        }
+        .ambience-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .ambience-item:nth-child(1) {
+            grid-row: 1 / 3;
+            border-radius: var(--radius-blob);
+        }
+        .ambience-item:nth-child(2) {
+            /* border-radius: 60% 40% 30% 70% / 50% 60% 40% 50%; */
+            aspect-ratio: 1;
+        }
+        .ambience-item:nth-child(3) {
+            /* border-radius: 40% 60% 55% 45% / 60% 40% 55% 45%; */
+            aspect-ratio: 1;
+        }
+        .ambience-item:nth-child(4) {
+            grid-column: 2 / 4;
+            border-radius: var(--radius-lg);
+            aspect-ratio: 2.2/1;
+        }
+        .ambience-label {
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--deep-purple);
+            font-family: var(--font-heading);
+        }
+        .ambience-dot {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            background: var(--hot-pink);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            z-index: 0;
+            animation: floatDot 6s ease-in-out infinite;
+        }
+
+        /* ──────────── FAQ SECTION ──────────── */
+        .faq-section {
+            padding: 100px 0;
+            background: #28134F;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+        .faq-section h2 {
+            text-align: center;
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: white;
+            margin-bottom: 40px;
+            line-height: 1.2;
+        }
+        .faq-list {
+            max-width: 750px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            position: relative;
+            z-index: 2;
+        }
+        .faq-item {
+            background: #fff;
+            border-radius: 30px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            transition: all var(--transition-smooth);
+        }
+        .faq-question {
+            padding: 20px 24px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--deep-purple);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            font-family: var(--font-heading);
+            transition: all var(--transition-smooth);
+            user-select: none;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+        }
+        .faq-question:hover {
+            color: var(--vibrant-purple);
+        }
+        .faq-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #f5f2ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-bounce);
+            flex-shrink: 0;
+            font-size: 0.9rem;
+            color: var(--vibrant-purple);
+        }
+        .faq-item.open .faq-icon {
+            background: var(--vibrant-purple);
+            color: #fff;
+            transform: rotate(45deg);
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+            padding: 0 24px;
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .faq-item.open .faq-answer {
+            max-height: 250px;
+            padding: 0 24px 20px;
+        }
+        .faq-blob {
+            position: absolute;
+            top: -60px;
+            right: -40px;
+            width: 180px;
+            height: 170px;
+            background: var(--sky-blue);
+            opacity: 0.2;
+            border-radius: var(--radius-blob);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ──────────── CHEF SPECIALS SECTION ──────────── */
+        .specials-section {
+            padding: 100px 0;
+            background: #fff;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+        .specials-section h2 {
+            text-align: center;
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: var(--deep-purple);
+            margin-bottom: 40px;
+            line-height: 1.2;
+        }
+        .specials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+            position: relative;
+            z-index: 2;
+        }
+        .special-card {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: all var(--transition-bounce);
+            position: relative;
+        }
+        .special-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 36px rgba(23, 19, 41, 0.12);
+        }
+        .special-card-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .special-card:hover .special-card-img {
+            transform: scale(1.06);
+        }
+        .special-card-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: var(--hot-pink);
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            font-family: var(--font-heading);
+            z-index: 2;
+        }
+        .special-card-body {
+            padding: 20px;
+        }
+        .special-card-body h3 {
+            font-size: 1.2rem;
+            color: var(--deep-purple);
+            margin-bottom: 4px;
+        }
+        .special-card-body p {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        .special-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .special-price {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--coral);
+        }
+        .special-dot {
+            position: absolute;
+            bottom: 40px;
+            left: -30px;
+            background: var(--lime);
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            z-index: 0;
+            animation: floatDot 5s ease-in-out infinite;
+        }
+
+        /* ──────────── GALLERY ──────────── */
+        .gallery-section {
+            padding: 100px 0;
+            background: var(--off-white);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+        .gallery-section h2 {
+            text-align: center;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            color: var(--deep-purple);
+            margin-bottom: 36px;
+        }
+        .gallery-grid-4 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .gallery-item {
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            cursor: pointer;
+            transition: all var(--transition-bounce);
+            box-shadow: var(--card-shadow);
+            position: relative;
+            aspect-ratio: 4/3;
+        }
+        .gallery-item:hover {
+            transform: scale(1.03);
+            box-shadow: var(--soft-shadow);
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+        .gallery-item:hover img {
+            transform: scale(1.08);
+        }
+        .gallery-blob {
+            position: absolute;
+            bottom: -50px;
+            right: -40px;
+            width: 220px;
+            height: 200px;
+            background: var(--bright-orange);
+            opacity: 0.2;
+            border-radius: var(--radius-blob3);
+            pointer-events: none;
+            z-index: 0;
+            display: none;
+        }
+
+        /* ──────────── NEWSLETTER SECTION ──────────── */
+        .newsletter-section {
+            padding: 100px 0;
+            background: var(--deep-purple);
+            position: relative;
+            overflow: hidden;
+            color: #fff;
+            width: 92%;
+            left: 4%;
+            border-radius: 50px;
+        }
+        .newsletter-section h2 {
+            text-align: center;
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 8px;
+            line-height: 1.2;
+            color: #fff;
+        }
+        .newsletter-section .section-subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 32px;
+            font-size: 1.05rem;
+        }
+        .newsletter-section .section-tag {
+            color: var(--lime);
+            display: block;
+            text-align: center;
+        }
+        .newsletter-section .section-tag::after {
+            background: var(--lime);
+        }
+        .newsletter-form {
+            max-width: 500px;
+            margin: 0 auto;
+            display: flex;
+            gap: 12px;
+            position: relative;
+            z-index: 2;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .newsletter-form input {
+            flex: 1;
+            min-width: 240px;
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            border-radius: 50px;
+            padding: 16px 22px;
+            font-size: 1rem;
+        }
+        .newsletter-form .btn-submit-news {
+            background: var(--lime);
+            color: var(--deep-purple);
+            font-weight: 700;
+            padding: 16px 28px;
+            border-radius: 50px;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-bounce);
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .newsletter-form .btn-submit-news:hover {
+            background: #ddf030;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(201, 242, 39, 0.4);
+        }
+        .newsletter-blob {
+            position: absolute;
+            top: -70px;
+            left: -50px;
+            width: 250px;
+            height: 230px;
+            background: var(--hot-pink);
+            opacity: 0.2;
+            border-radius: var(--radius-blob);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ──────────── CONTACT ──────────── */
+        .contact-section {
+            padding: 100px 0;
+            background: #fff;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+        .contact-section h2 {
+            text-align: center;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            color: var(--deep-purple);
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+        .contact-section .section-subtitle {
+            text-align: center;
+            color: #777;
+            margin-bottom: 40px;
+        }
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 50px;
+            align-items: start;
+            position: relative;
+            z-index: 2;
+        }
+        .contact-form {
+            display: grid;
+            gap: 16px;
+        }
+        .contact-form input,
+        .contact-form textarea {
+            background: #faf8ff;
+            border: 2px solid #e8e5f0;
+            border-radius: var(--radius-sm);
+        }
+        .contact-form textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+        .btn-submit {
+            background: var(--lime);
+            color: var(--deep-purple);
+            font-weight: 700;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-size: 1.05rem;
+            transition: all var(--transition-bounce);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            width: fit-content;
+        }
+        .btn-submit:hover {
+            background: #ddf030;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(201, 242, 39, 0.4);
+        }
+        .contact-info-panel {
+            background: #faf8ff;
+            padding: 32px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--card-shadow);
+        }
+        .contact-info-panel h3 {
+            color: var(--deep-purple);
+            font-size: 1.3rem;
+            margin-bottom: 16px;
+        }
+        .contact-info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 14px;
+            font-size: 0.95rem;
+            color: #555;
+        }
+        .contact-info-item i {
+            color: var(--vibrant-purple);
+            font-size: 1.1rem;
+            margin-top: 3px;
+            width: 20px;
+            text-align: center;
+        }
+        .contact-hours-mini {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 2px dashed #e8e5f0;
+        }
+        .contact-hours-mini h4 {
+            color: var(--deep-purple);
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+        .contact-hours-mini p {
+            font-size: 0.85rem;
+            color: #777;
+            margin-bottom: 4px;
+        }
+        .contact-blob-deco {
+            position: absolute;
+            top: -40px;
+            left: -50px;
+            width: 200px;
+            height: 180px;
+            background: var(--lavender);
+            opacity: 0.2;
+            border-radius: var(--radius-blob2);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ──────────── LOCATION ──────────── */
+        .location-section {
+            padding: 80px 0 100px;
+            background: #fff;
+            position: relative;
+            width: 100%;
+        }
+        .location-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        .location-info h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: var(--deep-purple);
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        .location-detail {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 16px;
+            font-size: 1.05rem;
+            color: #444;
+        }
+        .location-detail i {
+            color: var(--vibrant-purple);
+            font-size: 1.3rem;
+            margin-top: 2px;
+            width: 24px;
+            text-align: center;
+        }
+        .location-hours {
+            margin-top: 24px;
+            background: #faf8ff;
+            padding: 24px;
+            border-radius: var(--radius-md);
+        }
+        .location-hours h3 {
+            color: var(--deep-purple);
+            margin-bottom: 12px;
+        }
+        .location-hours p {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 6px;
+        }
+        .location-btns {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .location-map-visual {
+            border-radius: var(--radius-blob);
+            overflow: hidden;
+            box-shadow: var(--soft-shadow);
+            aspect-ratio: 1;
+            max-width: 440px;
+        }
+        .location-map-visual img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ──────────── FOOTER ──────────── */
+        .footer {
+            background: var(--deep-purple);
+            color: #fff;
+            padding: 60px 0 30px;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1.5fr;
+            gap: 40px;
+            position: relative;
+            z-index: 2;
+        }
+        .footer-brand h2 {
+            font-size: 2.5rem;
+            color: #fff;
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+        .footer-brand h2 .lime {
+            color: var(--lime);
+        }
+        .footer-brand p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+        }
+        .footer-col h3 {
+            color: var(--lime);
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+        }
+        .footer-col ul {
+            list-style: none;
+        }
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+        .footer-col ul li a {
+            color: rgba(255, 255, 255, 0.75);
+            transition: color var(--transition-smooth);
+            font-size: 0.95rem;
+        }
+        .footer-col ul li a:hover {
+            color: #fff;
+        }
+        .footer-social {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .footer-social a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            transition: all var(--transition-bounce);
+            font-size: 1.1rem;
+        }
+        .footer-social a:hover {
+            background: var(--lime);
+            color: var(--deep-purple);
+            transform: translateY(-3px);
+        }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 2;
+        }
+        .footer-blob {
+            position: absolute;
+            top: -80px;
+            right: -60px;
+            width: 250px;
+            height: 220px;
+            background: var(--vibrant-purple);
+            opacity: 0.25;
+            border-radius: var(--radius-blob);
+            pointer-events: none;
+        }
+
+        /* ──────────── CART DRAWER ──────────── */
+        .cart-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 3000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+        }
+        .cart-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .cart-drawer {
+            position: fixed;
+            top: 0;
+            right: -480px;
+            width: 440px;
+            max-width: 90vw;
+            height: 100vh;
+            background: #fff;
+            z-index: 3001;
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            box-shadow: -8px 0 40px rgba(0, 0, 0, 0.15);
+            border-radius: 28px 0 0 28px;
+        }
+        .cart-drawer.open {
+            right: 0;
+        }
+        .cart-header {
+            padding: 24px 28px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--deep-purple);
+            color: #fff;
+            border-radius: 28px 0 0 0;
+        }
+        .cart-header h3 {
+            font-size: 1.4rem;
+            color: #fff;
+        }
+        .cart-close {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+        }
+        .cart-close:hover {
+            background: rgba(255, 255, 255, 0.35);
+        }
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .cart-empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+        .cart-empty i {
+            font-size: 3rem;
+            color: #ddd;
+            margin-bottom: 16px;
+            display: block;
+        }
+        .cart-item {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            background: #faf8ff;
+            border-radius: var(--radius-md);
+            padding: 14px;
+            animation: slideInUp 0.3s ease;
+        }
+        .cart-item-img {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--radius-sm);
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        .cart-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .cart-item-info h4 {
+            font-size: 0.95rem;
+            color: var(--deep-purple);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .cart-item-info .cart-item-price {
+            font-weight: 700;
+            color: var(--vibrant-purple);
+            font-size: 0.9rem;
+        }
+        .cart-qty-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-qty {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-qty-minus {
+            background: #ffe0e0;
+            color: var(--coral);
+        }
+        .btn-qty-plus {
+            background: #e0f5e0;
+            color: #2d8a2d;
+        }
+        .btn-qty:hover {
+            transform: scale(1.1);
+        }
+        .cart-qty-num {
+            font-weight: 700;
+            font-size: 1rem;
+            min-width: 24px;
+            text-align: center;
+        }
+        .btn-remove-item {
+            background: transparent;
+            color: #ccc;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: color var(--transition-smooth);
+            padding: 6px;
+        }
+        .btn-remove-item:hover {
+            color: var(--coral);
+        }
+        .cart-footer {
+            padding: 20px 28px;
+            border-top: 1px solid #eee;
+            background: #fff;
+            border-radius: 0 0 0 28px;
+        }
+        .cart-total-row {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+            color: var(--deep-purple);
+        }
+        .cart-total-row.total {
+            font-size: 1.4rem;
+            color: var(--vibrant-purple);
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 2px dashed #eee;
+        }
+        .cart-footer-btns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 16px;
+        }
+        .btn-checkout {
+            background: var(--lime);
+            color: var(--deep-purple);
+            font-weight: 700;
+            padding: 14px 20px;
+            border-radius: 50px;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-bounce);
+        }
+        .btn-checkout:hover {
+            background: #ddf030;
+            box-shadow: 0 8px 24px rgba(201, 242, 39, 0.5);
+        }
+        .btn-clear-cart {
+            background: #fff;
+            color: var(--coral);
+            font-weight: 700;
+            padding: 14px 20px;
+            border-radius: 50px;
+            font-size: 1rem;
+            border: 2px solid #fdd;
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+        }
+        .btn-clear-cart:hover {
+            background: #fff5f5;
+            border-color: var(--coral);
+        }
+
+
+
+        /* ──────────── MY ORDER DRAWER ──────────── */
+.order-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 3002; /* above cart overlay */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+}
+.order-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+.order-drawer {
+    position: fixed;
+    top: 0;
+    right: -480px;
+    width: 440px;
+    max-width: 90vw;
+    height: 100vh;
+    background: #fff;
+    z-index: 3003;
+    transition: right 0.4s cubic-bezier(0.4,0,0.2,1);
+    display: flex;
+    flex-direction: column;
+    box-shadow: -8px 0 40px rgba(0,0,0,0.15);
+    border-radius: 28px 0 0 28px;
+}
+.order-drawer.open {
+    right: 0;
+}
+.order-header {
+    padding: 24px 28px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--deep-purple);
+    color: #fff;
+    border-radius: 28px 0 0 0;
+}
+.order-header h3 {
+    font-size: 1.4rem;
+    color: #fff;
+}
+.order-close {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: all var(--transition-smooth);
+}
+.order-close:hover {
+    background: rgba(255,255,255,0.35);
+}
+.order-items {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+.order-card {
+    background: #faf8ff;
+    border-radius: var(--radius-md);
+    padding: 18px;
+    box-shadow: var(--card-shadow);
+    border: 2px solid #e8e5f0;
+    animation: slideInUp 0.3s ease;
+}
+.order-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 2px dashed #f0edf5;
+}
+.order-id {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    color: var(--vibrant-purple);
+}
+.order-date {
+    font-size: 0.8rem;
+    color: #888;
+}
+.order-status {
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.7rem;
+    font-family: var(--font-heading);
+    background: #fff3e0;
+    color: #c77700;
+}
+.order-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+.order-item-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px;
+    background: #fff;
+    border-radius: 10px;
+}
+.order-item-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+.order-item-info {
+    flex: 1;
+}
+.order-item-info h4 {
+    font-size: 0.85rem;
+    color: var(--deep-purple);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.order-item-info span {
+    font-size: 0.75rem;
+    color: #888;
+}
+.order-item-qty {
+    font-weight: 700;
+    color: var(--vibrant-purple);
+}
+.order-total-row {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-top: 6px;
+    padding-top: 8px;
+    border-top: 1px solid #e8e5f0;
+}
+.order-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+}
+.order-empty i {
+    font-size: 3rem;
+    color: #ddd;
+    margin-bottom: 16px;
+    display: block;
+}
+@media (max-width: 900px) {
+    .order-drawer {
+        width: 100%;
+        max-width: 100%;
+        border-radius: 0;
+        right: -100%;
+    }
+    .order-drawer.open {
+        right: 0;
+    }
+    .order-header {
+        border-radius: 0;
+    }
+}
+
+        /* ──────────── CHECKOUT MODAL ──────────── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 4000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+            padding: 20px;
+        }
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            padding: 36px 28px;
+            max-width: 560px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: scroll;
+            position: relative;
+            animation: popIn 0.4s ease;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+            scrollbar-width: 0;
+        }
+    .modal::-webkit-scrollbar{
+        display: none;
+    }
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: #f5f5f5;
+            border: none;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+            font-size: 1rem;
+            color: #666;
+        }
+        .modal-close:hover {
+            background: #e8e8e8;
+            color: #333;
+        }
+        .modal h2 {
+            font-size: 1.8rem;
+            color: var(--deep-purple);
+            margin-bottom: 20px;
+        }
+        .modal .form-group {
+            margin-bottom: 14px;
+        }
+        .modal .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #444;
+            font-size: 0.9rem;
+        }
+
+        .btn-location {
+    background: #f0edf5;
+    color: var(--vibrant-purple);
+    font-weight: 600;
+    padding: 12px 20px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    border: 2px dashed var(--vibrant-purple);
+    cursor: pointer;
+    transition: all var(--transition-bounce);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+    width: 100%;
+    justify-content: center;
+}
+.btn-location:hover {
+    background: #e8e2f8;
+    border-style: solid;
+    transform: translateY(-1px);
+}
+.btn-location:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+.location-coords {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--vibrant-purple);
+    margin-top: 4px;
+    font-weight: 600;
+    text-align: center;
+}
+        .order-summary-mini {
+            background: #faf8ff;
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+        }
+        .order-summary-mini strong {
+            color: var(--vibrant-purple);
+            font-size: 1.1rem;
+        }
+        .btn-submit-order {
+            background: var(--lime);
+            color: var(--deep-purple);
+            font-weight: 700;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-size: 1.05rem;
+            width: 100%;
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-bounce);
+            margin-top: 8px;
+        }
+        .btn-submit-order:hover {
+            background: #ddf030;
+            box-shadow: 0 8px 24px rgba(201, 242, 39, 0.45);
+        }
+        .success-state {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .success-icon-wrap {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: #f0fdf0;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #2d8a2d;
+        }
+        .success-state h2 {
+            color: #2d8a2d;
+        }
+        .success-order-num {
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            color: var(--vibrant-purple);
+            margin: 8px 0;
+        }
+
+        /* ──────────── LIGHTBOX ──────────── */
+        .lightbox-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 5000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+        }
+        .lightbox-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .lightbox-content {
+            position: relative;
+            max-width: 85vw;
+            max-height: 85vh;
+        }
+        .lightbox-content img {
+            max-width: 85vw;
+            max-height: 85vh;
+            object-fit: contain;
+            border-radius: var(--radius-md);
+        }
+        .lightbox-close,
+        .lightbox-prev,
+        .lightbox-next {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all var(--transition-smooth);
+            z-index: 2;
+        }
+        .lightbox-close:hover,
+        .lightbox-prev:hover,
+        .lightbox-next:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+        .lightbox-close {
+            top: -50px;
+            right: 0;
+        }
+        .lightbox-prev {
+            left: -60px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .lightbox-next {
+            right: -60px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* ──────────── TOAST ──────────── */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 6000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+        .toast {
+            background: #fff;
+            padding: 16px 20px;
+            border-radius: var(--radius-md);
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideInRight 0.4s ease;
+            border-left: 4px solid var(--lime);
+            font-weight: 600;
+            font-size: 0.95rem;
+            max-width: 380px;
+            pointer-events: auto;
+        }
+        .toast.success {
+            border-left-color: #2d8a2d;
+        }
+        .toast.error {
+            border-left-color: var(--coral);
+        }
+        .toast i {
+            font-size: 1.2rem;
+        }
+        .toast.success i {
+            color: #2d8a2d;
+        }
+        .toast.error i {
+            color: var(--coral);
+        }
+
+        /* ──────────── BACK TO TOP ──────────── */
+        .back-to-top {
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--vibrant-purple);
+            color: #fff;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 900;
+            opacity: 0;
+            pointer-events: none;
+            transition: all var(--transition-smooth);
+            box-shadow: 0 6px 20px rgba(103, 55, 199, 0.4);
+        }
+        .back-to-top.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .back-to-top:hover {
+            background: var(--deep-purple);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 28px rgba(103, 55, 199, 0.5);
+        }
+
+        /* ──────────── RESPONSIVE ──────────── */
+        @media (max-width: 1100px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 36px;
+            }
+            .specials-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .gallery-grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+                max-width: 100%;
+            }
+            .nav-links a {
+                padding: 8px 10px;
+                font-size: 0.85rem;
+            }
+            .btn-order-nav {
+                padding: 10px 18px;
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .hero .container {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 40px;
+            }
+            .hero-subtitle {
+                margin: 0 auto 32px;
+            }
+            .hero-btns {
+                justify-content: center;
+            }
+            .hero-image-wrapper {
+                width: 300px;
+                height: 300px;
+                margin: 0 auto;
+            }
+            .hero-blob-1 {
+                width: 200px;
+                height: 180px;
+                top: -40px;
+                left: -30px;
+            }
+            .hero-blob-2 {
+                width: 180px;
+                height: 160px;
+                bottom: -60px;
+                right: -20px;
+            }
+            .about-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .about-image-wrap {
+                margin: 0 auto;
+                max-width: 340px;
+            }
+            .about-content p {
+                margin: 0 auto 28px;
+            }
+            .about-stats {
+                grid-template-columns: repeat(2, 1fr);
+                max-width: 400px;
+                margin: 0 auto 28px;
+            }
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .ambience-grid {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto;
+            }
+            .ambience-item:nth-child(1) {
+                grid-row: auto;
+                aspect-ratio: 3/4;
+            }
+            .ambience-item:nth-child(4) {
+                grid-column: auto;
+            }
+            .location-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .location-detail {
+                justify-content: center;
+            }
+            .location-btns {
+                justify-content: center;
+            }
+            .location-map-visual {
+                margin: 0 auto;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .specials-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .nav-links {
+                display: none;
+            }
+            .btn-order-nav {
+                display: none;
+            }
+            .hamburger {
+                display: flex;
+            }
+            .cart-drawer {
+                width: 100%;
+                max-width: 100%;
+                border-radius: 0;
+                right: -100%;
+            }
+            .cart-drawer.open {
+                right: 0;
+            }
+            .cart-header {
+                border-radius: 0;
+            }
+            .cart-footer {
+                border-radius: 0;
+            }
+            .services-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
+            }
+            .specials-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 18px;
+            }
+            .gallery-grid-4 {
+                grid-template-columns: 1fr 1fr;
+                gap: 14px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding: 100px 0 60px;
+                min-height: auto;
+            }
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            .hero-image-wrapper {
+                width: 240px;
+                height: 240px;
+            }
+            .services-section{
+                  border-top-left-radius: 0%;
+            border-top-right-radius: 0%;
+            }
+            .services-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
+            }
+            .service-card {
+                padding: 24px 16px 20px;
+                transform: none !important;
+            }
+            .menu-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                gap: 18px;
+            }
+            .ambience-grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+            .ambience-item {
+                aspect-ratio: 3/2 !important;
+                border-radius: var(--radius-lg) !important;
+            }
+            .ambience-item:nth-child(1) {
+                aspect-ratio: 4/3 !important;
+            }
+            .specials-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+            .gallery-grid-4 {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 28px;
+            }
+            .about-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .lightbox-prev {
+                left: 10px;
+            }
+            .lightbox-next {
+                right: 10px;
+            }
+            .lightbox-close {
+                top: 10px;
+                right: 10px;
+            }
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+            .newsletter-form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .newsletter-form input {
+                min-width: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 3.2rem;
+                line-height: 1.05;
+            }
+            .btn-primary,
+            .btn-secondary{
+            padding: 16px 50px;
+                
+            }
+            .dot-lg{
+                display: none;
+            }
+            .hero-label-pills{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .hero-pill {
+                font-size: 0.7rem;
+                padding: 6px 12px;
+                display: flex;
+                justify-content: center;
+            }
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+            .menu-filters {
+                gap: 6px;
+            }
+            .menu-filter-btn {
+                padding: 8px 14px;
+                font-size: 0.8rem;
+            }
+            .about-stats {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+            .about-stat-num {
+                font-size: 1.5rem;
+            }
+            .cart-footer-btns {
+                grid-template-columns: 1fr;
+            }
+            .toast-container {
+                left: 16px;
+                right: 16px;
+                bottom: 16px;
+            }
+            .toast {
+                max-width: 100%;
+            }
+            .back-to-top {
+                bottom: 16px;
+                left: 16px;
+                width: 40px;
+                height: 40px;
+            }
+            .gallery-grid-4 {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            .specials-grid {
+                grid-template-columns: 1fr;
+            }
+            .faq-question {
+                font-size: 0.9rem;
+                padding: 16px 18px;
+            }
+            .contact-info-panel {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ═══════════════ NAVBAR ═══════════════ -->
+    <nav class="navbar" id="navbar" aria-label="Main navigation">
+        <div class="navbar-inner">
+            <a href="#hero" class="nav-logo" aria-label="TOSO Home">TOSO<span class="nav-logo-dot"></span></a>
+            <ul class="nav-links">
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#menu">Menu</a></li>
+                <li><a href="#ambience">Ambience</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#specials">Specials</a></li>
+                <li><a href="#" id="myOrderNavLink">My Order</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="#menu" class="btn-order-nav">Order Now</a>
+                <button class="cart-nav-btn" id="cartNavBtn" aria-label="Open cart">
+                    <i class="fa-solid fa-basket-shopping"></i>
+                    <span class="cart-count-badge" id="cartCountBadge" style="display:none;">0</span>
+                </button>
+                <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ═══════════════ MOBILE NAV PANEL ═══════════════ -->
+    <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+    <div class="mobile-nav-panel" id="mobileNavPanel">
+        <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close menu"><i class="fa-solid fa-xmark"></i></button>
+        <div class="mobile-nav-blob"></div>
+        <a href="#hero">Home</a>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#menu">Menu</a>
+        <a href="#ambience">Ambience</a>
+        <a href="#faq">FAQ</a>
+        <a href="#specials">Specials</a>
+        <a href="#" id="mobileMyOrderLink">My Order</a>
+        <a href="#contact">Contact</a>
+        <a href="#menu" style="color:var(--lime);">Order Now</a>
+    </div>
+
+    <!-- ═══════════════ HERO ═══════════════ -->
+    <section class="hero" id="hero">
+        <div class="blob blob-pink hero-blob-1"></div>
+        <!-- <div class="blob blob-orange hero-blob-2"></div> -->
+        <div class="blob blob-lime hero-blob-3"></div>
+        <div class="dot-circle dot-lg hero-dot-1"></div>
+        <div class="dot-circle dot-md hero-dot-2"></div>
+        <div class="dot-circle dot-sm hero-dot-3"></div>
+        <div class="container">
+            <div class="hero-content reveal">
+                <div class="hero-label-pills">
+                    <span class="hero-pill">FRESH</span>
+                    <span class="hero-pill">HOT</span>
+                    <span class="hero-pill">YUM</span>
+                </div>
+                <h1 class="hero-title">TASTE<br> THE <span class="highlight">GOOD</span> <span class="high">STUFF</span>.</h1>
+                <p class="hero-subtitle">Bold flavors, colorful plates, and a whole lot of good vibes. Welcome to TOSO — where every bite is a celebration.</p>
+                <div class="hero-btns">
+                    <a href="#menu" class="btn-primary">Explore Menu <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="#contact" class="btn-secondary">Get In Touch <i class="fa-solid fa-paper-plane"></i></a>
+                </div>
+            </div>
+            <div class="hero-visual reveal">
+                <div class="hero-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&h=600&fit=crop&crop=center" alt="TOSO signature burger" loading="eager">
+                </div>
+                <svg class="hero-squiggle hero-squiggle-1" viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 30 Q25 5 45 28 Q65 50 85 25 Q95 15 95 25" stroke="#C9F227" stroke-width="4" stroke-linecap="round" fill="none" stroke-dasharray="200" style="animation:drawSquiggle 2s ease forwards 1s;"/>
+                </svg>
+                <svg class="hero-squiggle hero-squiggle-2" viewBox="0 0 80 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 25 Q20 8 38 26 Q55 42 72 22" stroke="#F34B9B" stroke-width="4" stroke-linecap="round" fill="none" stroke-dasharray="180" style="animation:drawSquiggle 2s ease forwards 1.5s;"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+    
+    <div class="curve-transition"></div>
+
+    <!-- ═══════════════ ABOUT ═══════════════ -->
+    <section class="about-section section-white" id="about">
+        
+        <div class="container">
+            <div class="about-grid">
+                <div class="reveal" style="position:relative;">
+                    <div class="about-blob-behind"></div>
+                    <div class="about-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&h=600&fit=crop&crop=center" alt="TOSO restaurant interior" loading="lazy">
+                    </div>
+                </div>
+                <div class="about-content reveal">
+                    <span class="section-tag">About Us</span>
+                    <h2>GOOD FOOD.<br><span class="accent">GOOD MOOD.</span></h2>
+                    <p>At TOSO, we believe eating out should be an experience — bold, colorful, and unforgettable. From our handcrafted dishes to our vibrant atmosphere, everything we do is designed to make you smile. Fresh ingredients, creative recipes, and a whole lot of love go into every plate.</p>
+                    <div class="about-stats">
+                        <div class="about-stat"><div class="about-stat-num">10+</div><div class="about-stat-label">Signature Dishes</div></div>
+                        <div class="about-stat"><div class="about-stat-num">5★</div><div class="about-stat-label">Customer Love</div></div>
+                        <div class="about-stat"><div class="about-stat-num">100%</div><div class="about-stat-label">Fresh Ingredients</div></div>
+                        <div class="about-stat"><div class="about-stat-num">24/7</div><div class="about-stat-label">Good Vibes</div></div>
+                    </div>
+                    <a href="#services" class="btn-primary">Meet TOSO <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="about-dot-deco"></div>
+    </section>
+
+    <!-- ═══════════════ SERVICES ═══════════════ -->
+    <section class="services-section" id="services">
+        <div class="service-blob-bg"></div>
+        <div class="container">
+            <span class="section-tag reveal">Our Services</span>
+            <h2 class="reveal">WE DO MORE<br>THAN FOOD.</h2>
+            <p class="section-subtitle reveal">Wherever you are, whatever the occasion — TOSO has you covered.</p>
+            <div class="services-grid">
+                <div class="service-card reveal">
+                    <div class="service-icon"><i class="fa-solid fa-utensils"></i></div>
+                    <h3>Dine In</h3>
+                    <p>Soak in the vibrant TOSO atmosphere with friends and family. Good vibes guaranteed.</p>
+                </div>
+                <div class="service-card reveal">
+                    <div class="service-icon"><i class="fa-solid fa-bag-shopping"></i></div>
+                    <h3>Takeaway</h3>
+                    <p>Grab your favorites on the go. Packed fresh, packed with love — ready when you are.</p>
+                </div>
+                <div class="service-card reveal">
+                    <div class="service-icon"><i class="fa-solid fa-champagne-glasses"></i></div>
+                    <h3>Catering</h3>
+                    <p>Bring TOSO to your events. From office lunches to celebrations, we cater with flair.</p>
+                </div>
+                <div class="service-card reveal">
+                    <div class="service-icon"><i class="fa-solid fa-star"></i></div>
+                    <h3>Private Events</h3>
+                    <p>Book our space for your special moments. Birthdays, anniversaries, or just because.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ MENU ═══════════════ -->
+    <section class="menu-section" id="menu">
+        <div class="menu-blob-deco"></div>
+        <div class="container">
+            <span class="section-tag reveal">The Menu</span>
+            <h2 class="reveal">WHAT'S<br>COOKING?</h2>
+            <p class="section-subtitle reveal">Explore our handcrafted menu — every dish made with love and bold flavors.</p>
+            <div class="menu-filters reveal" id="menuFilters"></div>
+            <div class="menu-grid" id="menuGrid"></div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ AMBIENCE ═══════════════ -->
+    <section class="ambience-section" id="ambience">
+        <div class="ambience-dot"></div>
+        <div class="container">
+            <span class="section-tag reveal">The Vibe</span>
+            <h2 class="reveal">THE TOSO<br>VIBE.</h2>
+            <div class="ambience-grid reveal">
+                <div class="ambience-item">
+                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&h=800&fit=crop&crop=center" alt="TOSO dining atmosphere" loading="lazy">
+                    <span class="ambience-label">Dinner Time</span>
+                </div>
+                <div class="ambience-item">
+                    <img src="https://images.unsplash.com/photo-1559329007-40df8a9345d8?w=400&h=400&fit=crop&crop=center" alt="Friends enjoying food" loading="lazy">
+                    <span class="ambience-label">Good Vibes</span>
+                </div>
+                <div class="ambience-item">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjLdB9uSyiGSQi7OHTdn31HvJSXAr9oc2Cc0ivWPTbwg&s=10" alt="Late night dining" loading="lazy">
+                    <span class="ambience-label">Late Night</span>
+                </div>
+                <div class="ambience-item">
+                    <img src="https://images.unsplash.com/photo-1544148103-0773bf10d330?w=700&h=320&fit=crop&crop=center" alt="Friends gathering at TOSO" loading="lazy">
+                    <span class="ambience-label">Friends & Food</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ FAQ ═══════════════ -->
+    <section class="faq-section" id="faq">
+        <div class="faq-blob"></div>
+        <div class="container">
+            <span class="section-tag reveal">FAQ</span>
+            <h2 class="reveal">GOT<br>QUESTIONS?</h2>
+            <div class="faq-list reveal">
+                <div class="faq-item">
+                    <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                        <span>Do you take reservations?</span>
+                        <span class="faq-icon"><i class="fa-solid fa-plus"></i></span>
+                    </button>
+                    <div class="faq-answer"><p>Yes! We highly recommend booking ahead, especially on weekends. You can call us or send a message through our contact form and we'll get you sorted.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                        <span>Is there a vegetarian or vegan menu?</span>
+                        <span class="faq-icon"><i class="fa-solid fa-plus"></i></span>
+                    </button>
+                    <div class="faq-answer"><p>Absolutely! We have a dedicated selection of vegetarian and vegan dishes across our menu. Just ask your server for recommendations or look for the green leaf icon on the menu.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                        <span>Do you offer delivery?</span>
+                        <span class="faq-icon"><i class="fa-solid fa-plus"></i></span>
+                    </button>
+                    <div class="faq-answer"><p>Yes we do! You can order directly through our website and we'll deliver piping hot food right to your doorstep. Delivery charges apply based on your location.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                        <span>Can I host a private event at TOSO?</span>
+                        <span class="faq-icon"><i class="fa-solid fa-plus"></i></span>
+                    </button>
+                    <div class="faq-answer"><p>Of course! We love hosting celebrations. Get in touch with us through the contact form and our team will help you plan the perfect event — from birthday parties to corporate gatherings.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                        <span>What are your opening hours?</span>
+                        <span class="faq-icon"><i class="fa-solid fa-plus"></i></span>
+                    </button>
+                    <div class="faq-answer"><p>We're open Mon–Thu 12PM–11PM, Friday 2PM–12AM, and Sat–Sun 12PM–12AM. Late night cravings? We've got you covered on weekends!</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ CHEF SPECIALS ═══════════════ -->
+    <section class="specials-section" id="specials">
+        <div class="special-dot"></div>
+        <div class="container">
+            <span class="section-tag reveal">Chef's Picks</span>
+            <h2 class="reveal">SEASONAL<br>SPECIALS.</h2>
+            <div class="specials-grid reveal" id="specialsGrid"></div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ GALLERY ═══════════════ -->
+    <section class="gallery-section" id="gallery">
+        <div class="gallery-blob"></div>
+        <div class="container">
+            <span class="section-tag reveal">Gallery</span>
+            <h2 class="reveal">SNAPS &<br>PLATES.</h2>
+            <div class="gallery-grid-4 reveal" id="galleryGrid"></div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ NEWSLETTER ═══════════════ -->
+    <section class="newsletter-section" id="newsletter">
+        <div class="newsletter-blob"></div>
+        <div class="container">
+            <span class="section-tag reveal">Stay Connected</span>
+            <h2 class="reveal">JOIN THE<br>TOSO FAMILY.</h2>
+            <p class="section-subtitle reveal">Sign up for exclusive deals, new menu drops, and event invites — straight to your inbox.</p>
+            <form class="newsletter-form reveal" id="newsletterForm">
+                <input type="email" placeholder="Your email address" required aria-label="Email for newsletter">
+                <button type="submit" class="btn-submit-news">Subscribe <i class="fa-solid fa-paper-plane"></i></button>
+            </form>
+        </div>
+    </section>
+
+    <!-- ═══════════════ CONTACT ═══════════════ -->
+    <section class="contact-section" id="contact">
+        <div class="contact-blob-deco"></div>
+        <div class="container">
+            <span class="section-tag reveal">Contact Us</span>
+            <h2 class="reveal" style="text-align:center;">LET'S<br>TALK FOOD.</h2>
+            <p class="section-subtitle reveal" style="text-align:center;">Got a question? Want to book? Just want to say hi? We're all ears.</p>
+            <div class="contact-grid reveal">
+                <form class="contact-form" id="contactForm">
+                    <input type="text" name="name" placeholder="Your Full Name" required aria-label="Full Name">
+                    <input type="email" name="email" placeholder="Your Email Address" required aria-label="Email">
+                    <input type="tel" name="phone" placeholder="Your Phone Number" aria-label="Phone">
+                    <input type="text" name="subject" placeholder="Subject" required aria-label="Subject">
+                    <textarea name="message" placeholder="Your Message" required aria-label="Message"></textarea>
+                    <button type="submit" class="btn-submit">Send Message <i class="fa-solid fa-paper-plane"></i></button>
+                </form>
+                <div class="contact-info-panel">
+                    <h3><i class="fa-solid fa-location-dot" style="color:var(--hot-pink);"></i> Find Us</h3>
+                    <div class="contact-info-item"><i class="fa-solid fa-map-pin"></i><span>DHA Phase 6, Lahore, Pakistan</span></div>
+                    <div class="contact-info-item"><i class="fa-solid fa-phone"></i><span>+92 300 0000000</span></div>
+                    <div class="contact-info-item"><i class="fa-solid fa-envelope"></i><span>hello@toso.pk</span></div>
+                    <div class="contact-hours-mini">
+                        <h4><i class="fa-solid fa-clock" style="color:var(--vibrant-purple);"></i> Opening Hours</h4>
+                        <p><strong>Mon – Thu:</strong> 12:00 PM – 11:00 PM</p>
+                        <p><strong>Friday:</strong> 2:00 PM – 12:00 AM</p>
+                        <p><strong>Sat – Sun:</strong> 12:00 PM – 12:00 AM</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ LOCATION ═══════════════ -->
+    <section class="location-section" id="location">
+        <div class="container">
+            <div class="location-grid">
+                <div class="location-info reveal">
+                    <h2>FIND US.</h2>
+                    <div class="location-detail"><i class="fa-solid fa-location-dot"></i><span>DHA Phase 6, Lahore, Pakistan</span></div>
+                    <div class="location-detail"><i class="fa-solid fa-phone"></i><span>+92 300 0000000</span></div>
+                    <div class="location-detail"><i class="fa-solid fa-envelope"></i><span>hello@toso.pk</span></div>
+                    <div class="location-hours">
+                        <h3><i class="fa-solid fa-clock"></i> Opening Hours</h3>
+                        <p><strong>Mon – Thu:</strong> 12:00 PM – 11:00 PM</p>
+                        <p><strong>Friday:</strong> 2:00 PM – 12:00 AM</p>
+                        <p><strong>Sat – Sun:</strong> 12:00 PM – 12:00 AM</p>
+                    </div>
+                    <div class="location-btns">
+                        <a href="https://maps.google.com/?q=DHA+Phase+6+Lahore+Pakistan" target="_blank" rel="noopener" class="btn-primary">Get Directions <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                        <a href="tel:+923000000000" class="btn-secondary" style="color:var(--dark-text);border-color:#ccc;">Call TOSO <i class="fa-solid fa-phone"></i></a>
+                    </div>
+                </div>
+                <div class="location-map-visual reveal">
+                    <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=500&h=500&fit=crop&crop=center" alt="TOSO location" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ FOOTER ═══════════════ -->
+    <footer class="footer">
+        <div class="footer-blob"></div>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h2>TOSO<br><span class="lime">GOOD FOOD.<br>BIG MOOD.</span></h2>
+                    <p>Bold flavors, colorful plates, and a whole lot of good vibes.</p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+                        <a href="#" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#hero">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#menu">Menu</a></li>
+                        <li><a href="#ambience">Ambience</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="#specials">Specials</a></li>
+                        <li><a href="#gallery">Gallery</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Contact</h3>
+                    <ul>
+                        <li>Lahore, Pakistan</li>
+                        <li>+92 300 0000000</li>
+                        <li>hello@toso.pk</li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Hours</h3>
+                    <ul>
+                        <li>Mon–Thu: 12PM–11PM</li>
+                        <li>Fri: 2PM–12AM</li>
+                        <li>Sat–Sun: 12PM–12AM</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">&copy; 2026 TOSO. All Rights Reserved.</div>
+        </div>
+    </footer>
+
+    <!-- ═══════════════ CART OVERLAY & DRAWER ═══════════════ -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="cart-drawer" id="cartDrawer">
+        <div class="cart-header">
+            <h3>YOUR TOSO<br>ORDER</h3>
+            <button class="cart-close" id="cartClose" aria-label="Close cart"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="cart-items" id="cartItems"></div>
+        <div class="cart-footer" id="cartFooter"></div>
+    </div>
+
+    <!-- ═══════════════ MY ORDER DRAWER ═══════════════ -->
+<div class="order-overlay" id="orderOverlay"></div>
+<div class="order-drawer" id="orderDrawer">
+    <div class="order-header">
+        <h3>MY<br>ORDERS</h3>
+        <button class="order-close" id="orderClose" aria-label="Close order history"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="order-items" id="orderItems"></div>
+</div>
+
+    <!-- ═══════════════ CHECKOUT MODAL ═══════════════ -->
+    <div class="modal-overlay" id="checkoutOverlay">
+        <div class="modal" id="checkoutModal"></div>
+    </div>
+
+    <!-- ═══════════════ LIGHTBOX ═══════════════ -->
+    <div class="lightbox-overlay" id="lightboxOverlay">
+        <div class="lightbox-content">
+            <button class="lightbox-close" id="lightboxClose" aria-label="Close lightbox"><i class="fa-solid fa-xmark"></i></button>
+            <button class="lightbox-prev" id="lightboxPrev" aria-label="Previous image"><i class="fa-solid fa-chevron-left"></i></button>
+            <button class="lightbox-next" id="lightboxNext" aria-label="Next image"><i class="fa-solid fa-chevron-right"></i></button>
+            <img src="" alt="" id="lightboxImg">
+        </div>
+    </div>
+
+    <!-- ═══════════════ TOAST CONTAINER ═══════════════ -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ═══════════════ BACK TO TOP ═══════════════ -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
+
+
+     <script src="http://localhost:5000/socket.io/socket.io.js"></script>
+
+
+    <script>
+(function() {
+    
+            const API_BASE = 'http://localhost:5000/api';
+
+
+            const SOCKET_BASE =
+    API_BASE.replace("/api", "");
+
+const socket = io(SOCKET_BASE);
+
+socket.on("connect", () => {
+
+    console.log(
+        "🔌 Customer connected to Socket.IO:",
+        socket.id
+    );
+
+    const customerId = getCustomerId();
+
+    socket.emit("joinCustomerRoom", {
+        customerId
+    });
+
+    console.log(
+        "👤 Joined customer room:",
+        customerId
+    );
+
+});
+
+socket.on("orderStatusUpdated", async (data) => {
+
+    console.log(
+        "🔄 Live status update received:",
+        data
+    );
+
+    const formattedStatus =
+        data.status
+            .replace(/_/g, " ")
+            .replace(/\b\w/g, char => char.toUpperCase());
+
+    showToast(
+        `Your order ${data.orderNumber} is now ${formattedStatus}.`,
+        "success"
+    );
+
+    await loadOrdersFromBackend();
+
+});
+
+
+socket.on("menuUpdated", async (data) => {
+
+    console.log(
+        "🔄 Menu updated:",
+        data.action
+    );
+
+    await loadMenuFromDatabase();
+renderMenu();
+
+});
+
+socket.on("chefSpecialUpdated", async (data) => {
+
+    console.log(
+        "🔥 CHEF SPECIAL SOCKET RECEIVED:",
+        data
+    );
+
+    await loadSpecialsFromDatabase();
+    renderSpecials();
+
+});
+
+    // ──────────── MENU DATA ────────────
+
+    let menuData = [];
+
+    async function loadMenuFromDatabase() {
+    try {
+        const response = await fetch(`${API_BASE}/menu`);
+
+        if (!response.ok) {
+            throw new Error('Failed to load menu');
+        }
+
+        const result = await response.json();
+
+        if (!result.success) {
+            throw new Error(result.message || 'Failed to load menu');
+        }
+
+        menuData = result.data
+            .filter(item => item.available !== false)
+            .map(item => ({
+                id: item._id,
+                name: item.name,
+                description: item.description || '',
+                category: item.category,
+                price: Number(item.price),
+                image: item.image || ''
+            }));
+
+        console.log('🍽️ Menu loaded from MongoDB:', menuData);
+
+        renderFilters();
+        renderMenu();
+
+    } catch (error) {
+        console.error('❌ Failed to load menu:', error);
+
+        const grid = document.getElementById('menuGrid');
+
+        if (grid) {
+            grid.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align:center; padding:40px;">
+                    <p>Unable to load the menu right now.</p>
+                </div>
+            `;
+        }
+    }
+};
+
+
+
+
+// ========================================
+// CHEF SPECIALS
+// ========================================
+
+let specialsData = [];
+
+async function loadSpecialsFromDatabase() {
+    try {
+
+        const response = await fetch(
+            `${API_BASE}/chefs-special`
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                'Failed to load Chef Specials.'
+            );
+        }
+
+        const result = await response.json();
+
+        if (!result.success) {
+            throw new Error(
+                result.message ||
+                'Failed to load Chef Specials.'
+            );
+        }
+
+        specialsData = (result.data || [])
+            .filter(item => item.available !== false)
+            .map(item => ({
+                id: item._id,
+                name: item.name,
+                description: item.description || '',
+                price: Number(item.price),
+                image: item.image || '',
+                badge: item.badge || 'SPECIAL'
+            }));
+
+        console.log(
+            '👨‍🍳 Chef Specials loaded from MongoDB:',
+            specialsData
+        );
+
+        renderSpecials();
+
+    } catch (error) {
+
+        console.error(
+            '❌ Failed to load Chef Specials:',
+            error
+        );
+
+        const grid =
+            document.getElementById('specialsGrid');
+
+        if (grid) {
+
+            grid.innerHTML = `
+                <div style="
+                    grid-column: 1 / -1;
+                    text-align: center;
+                    padding: 40px;
+                ">
+                    <p>
+                        Unable to load Chef Specials right now.
+                    </p>
+                </div>
+            `;
+        }
+    }
+};
+
+function renderSpecials() {
+
+    const grid =
+        document.getElementById('specialsGrid');
+
+    if (!grid) return;
+
+    if (!specialsData.length) {
+
+        grid.innerHTML = `
+            <div style="
+                grid-column: 1 / -1;
+                text-align: center;
+                padding: 40px;
+            ">
+                <p>
+                    No Chef Specials available right now.
+                </p>
+            </div>
+        `;
+
+        return;
+    }
+
+    grid.innerHTML = specialsData.map(item => `
+
+        <div class="special-card">
+
+            <span class="special-card-badge">
+                ${item.badge}
+            </span>
+
+            <img
+                src="${item.image}"
+                alt="${item.name}"
+                class="special-card-img"
+                loading="lazy"
+            >
+
+            <div class="special-card-body">
+
+                <h3>
+                    ${item.name}
+                </h3>
+
+                <p>
+                    ${item.description}
+                </p>
+
+                <div class="special-card-footer">
+
+                    <span class="special-price">
+                        PKR ${item.price.toLocaleString()}
+                    </span>
+
+                    <button
+                        class="btn-add"
+                        onclick="window._tosoAddSpecialToCart('${item.id}')"
+                    >
+                        <i class="fa-solid fa-plus"></i>
+                        Add
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `).join('');
+}
+
+    // const menuData = [
+    //     { id: 1, name: 'Truffle Fries', description: 'Crispy golden fries tossed in truffle oil & parmesan.', category: 'starters', price: 650, image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400&h=300&fit=crop&crop=center' },
+    //     { id: 2, name: 'Crispy Chicken Bites', description: 'Bite-sized crunchy chicken with spicy dipping sauce.', category: 'starters', price: 750, image: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=400&h=300&fit=crop&crop=center' },
+    //     { id: 3, name: 'Loaded Nachos', description: 'Tortilla chips loaded with cheese, jalapeños & salsa.', category: 'starters', price: 850, image: 'https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?w=400&h=300&fit=crop&crop=center' },
+    //     { id: 4, name: 'Garlic Parmesan Wings', description: 'Juicy wings coated in garlic parmesan sauce.', category: 'starters', price: 950, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3b1gMiY4p02swAM7HyT_aBbpn_A3g9PeQkFWeF9NPGQ&s=10' },
+    //     { id: 5, name: 'TOSO Signature Steak', description: 'Premium cut grilled to perfection with herb butter.', category: 'main-course', price: 1650, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfxw2EoCRr5NJmMWU1JrnBjv0njQZWEAWjjY5pT87P1w&s=10' },
+    //     { id: 6, name: 'Creamy Mushroom Chicken', description: 'Tender chicken in rich creamy mushroom sauce.', category: 'main-course', price: 1250, image: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=400&h=300&fit=crop&crop=center' },
+    //     { id: 7, name: 'Grilled Chicken Platter', description: 'Perfectly grilled chicken served with seasonal vegetables.', category: 'main-course', price: 1050, image: 'https://images.unsplash.com/photo-1532550907401-a500c9a57435?w=400&h=300&fit=crop&crop=center' },
+    //     { id: 8, name: 'Herb Butter Salmon', description: 'Fresh salmon fillet with aromatic herb butter.', category: 'main-course', price: 1550, image: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=400&h=300&fit=crop&crop=center' },
+    //     { id: 9, name: 'TOSO Classic Burger', description: 'Double patty, cheddar, lettuce & secret TOSO sauce.', category: 'burgers', price: 850, image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop&crop=center' },
+    //     { id: 10, name: 'Smoky BBQ Burger', description: 'Smoky barbecue sauce, crispy onions & beef patty.', category: 'burgers', price: 950, image: 'https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=400&h=300&fit=crop&crop=center' },
+    //     { id: 11, name: 'Truffle Mushroom Burger', description: 'Gourmet burger with truffle mayo & sautéed mushrooms.', category: 'burgers', price: 1050, image: 'https://images.unsplash.com/photo-1586816001966-79b736744398?w=400&h=300&fit=crop&crop=center' },
+    //     { id: 12, name: 'Margherita Pizza', description: 'Classic tomato, mozzarella & fresh basil on thin crust.', category: 'pizza', price: 750, image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=300&fit=crop&crop=center' },
+    //     { id: 13, name: 'TOSO Special Pizza', description: 'Loaded with pepperoni, olives, bell peppers & mushrooms.', category: 'pizza', price: 1050, image: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400&h=300&fit=crop&crop=center' },
+    //     { id: 14, name: 'Spicy Chicken Pizza', description: 'Fiery chicken with jalapeños & spicy tomato base.', category: 'pizza', price: 950, image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=300&fit=crop&crop=center' },
+    //     { id: 15, name: 'Creamy Alfredo', description: 'Fettuccine in rich, creamy Alfredo sauce with garlic.', category: 'pasta', price: 850, image: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=400&h=300&fit=crop&crop=center' },
+    //     { id: 16, name: 'Arrabbiata', description: 'Penne in spicy tomato sauce with red chili & basil.', category: 'pasta', price: 750, image: 'https://images.unsplash.com/photo-1608219992759-8d74ed8d76eb?w=400&h=300&fit=crop&crop=center' },
+    //     { id: 17, name: 'Truffle Pasta', description: 'Luxurious pasta with black truffle & parmesan cream.', category: 'pasta', price: 1150, image: 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400&h=300&fit=crop&crop=center' },
+    //     { id: 18, name: 'Chocolate Lava Cake', description: 'Warm chocolate cake with a gooey molten center.', category: 'desserts', price: 650, image: 'data:image/jpeg;base64,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' },
+    //     { id: 19, name: 'Tiramisu', description: 'Classic Italian layered coffee dessert with mascarpone.', category: 'desserts', price: 550, image: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=400&h=300&fit=crop&crop=center' },
+    //     { id: 20, name: 'Cheesecake', description: 'Creamy New York style cheesecake with berry compote.', category: 'desserts', price: 750, image: 'https://images.unsplash.com/photo-1524351199678-941a58a3df50?w=400&h=300&fit=crop&crop=center' },
+    //     { id: 21, name: 'Fresh Lemonade', description: 'Zesty homemade lemonade with a hint of mint.', category: 'drinks', price: 350, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmMHE6qXMwZkdrQwrOtd-71xcMvbBq7C4lDu_3yfcEJA&s=10r' },
+    //     { id: 22, name: 'Berry Mojito', description: 'Refreshing mocktail with mixed berries & lime.', category: 'drinks', price: 450, image: 'https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=400&h=300&fit=crop&crop=center' },
+    //     { id: 23, name: 'Iced Coffee', description: 'Smooth cold brew served over ice with creamy foam.', category: 'drinks', price: 400, image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=300&fit=crop&crop=center' },
+    //     { id: 24, name: 'Signature TOSO Cooler', description: 'Our secret blend of tropical fruits — a must-try!', category: 'drinks', price: 500, image: 'https://images.unsplash.com/photo-1543253687-c931c8e01820?w=400&h=300&fit=crop&crop=center' },
+    //     { id: 25, name: 'Wagyu Beef Burger', description: 'Premium wagyu patty with truffle aioli & aged cheddar.', category: 'burgers', price: 1950, image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=300&fit=crop&crop=center' },
+    //     { id: 26, name: 'Lobster Linguine', description: 'Succulent lobster tail in rich garlic butter & white wine sauce.', category: 'pasta', price: 2450, image: 'https://images.unsplash.com/photo-1553621042-f6e147245754?w=400&h=300&fit=crop&crop=center' },
+    //     { id: 27, name: 'Mango Passion Cheesecake', description: 'Silky cheesecake with fresh mango coulis & passion fruit glaze.', category: 'desserts', price: 850, image: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=400&h=300&fit=crop&crop=center' },
+    // ];
+
+    const categories = [
+        { key: 'all', label: 'All' },
+        { key: 'starters', label: 'Starters' },
+        { key: 'main-course', label: 'Main Course' },
+        { key: 'burgers', label: 'Burgers' },
+        { key: 'pizza', label: 'Pizza' },
+        { key: 'pasta', label: 'Pasta' },
+        { key: 'desserts', label: 'Desserts' },
+        { key: 'drinks', label: 'Drinks' },
+    ];
+
+    const galleryImages = [
+        { src: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&h=500&fit=crop&crop=center', alt: 'TOSO Burger' },
+        { src: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&h=500&fit=crop&crop=center', alt: 'Margherita Pizza' },
+        { src: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=600&h=500&fit=crop&crop=center', alt: 'Creamy Pasta' },
+        { src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN78JD8OMP9bbXaOo8jD7TwVi0vn0OOcoZ7K_ySqaDCA&s=10', alt: 'Chocolate Lava Cake' },
+    ];
+
+    // ──────────── STATE ────────────
+    // ──────────── STATE ────────────
+    let cart = [];
+
+    const CART_KEY = 'tosoCart';
+    const ORDER_HISTORY_KEY = 'tosoOrderHistory';
+    const CUSTOMER_ID_KEY = 'tosoCustomerId';
+    
+    let currentCategory = 'all';
+    let currentLat = null;
+    let currentLng = null;
+    let lightboxIndex = 0;
+
+    
+    // ──────────── CUSTOMER ID ────────────
+
+function generateCustomerId() {
+
+    const randomPart =
+        typeof crypto !== "undefined" &&
+        typeof crypto.randomUUID === "function"
+            ? crypto.randomUUID().replace(/-/g, "").substring(0, 12)
+            : Math.random().toString(36).substring(2, 14);
+
+    return (
+        "cust_" +
+        Date.now().toString(36) +
+        "_" +
+        randomPart
+    );
+}
+
+function getCustomerId() {
+    let customerId = localStorage.getItem(CUSTOMER_ID_KEY);
+
+    if (!customerId) {
+        customerId = generateCustomerId();
+
+        localStorage.setItem(
+            CUSTOMER_ID_KEY,
+            customerId
+        );
+    }
+
+    return customerId;
+}
+
+
+
+    // ──────────── ORDER HISTORY HELPERS ────────────
+    function getOrderHistory() {
+        try {
+            const stored = localStorage.getItem(ORDER_HISTORY_KEY);
+            return stored ? JSON.parse(stored) : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function saveOrderToHistory(order) {
+        const history = getOrderHistory();
+        history.unshift(order);
+        localStorage.setItem(ORDER_HISTORY_KEY, JSON.stringify(history));
+    }
+
+    // ──────────── LOCAL STORAGE ────────────
+    function loadCart() {
+        try {
+            const stored = localStorage.getItem(CART_KEY);
+            if (stored) cart = JSON.parse(stored);
+            if (!Array.isArray(cart)) cart = [];
+        } catch (e) {
+            cart = [];
+        }
+    }
+
+    function saveCart() {
+        localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    }
+
+    function getCartCount() {
+        return cart.reduce((sum, item) => sum + item.qty, 0);
+    }
+
+    function getCartSubtotal() {
+        return cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+    }
+
+    // ──────────── TOAST ────────────
+    function showToast(message, type = '') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = 'toast ' + type;
+        let icon = '<i class="fa-solid fa-circle-check"></i>';
+        if (type === 'error') icon = '<i class="fa-solid fa-circle-exclamation"></i>';
+        else if (!type) icon = '<i class="fa-solid fa-circle-info"></i>';
+        toast.innerHTML = icon + ' <span>' + message + '</span>';
+        container.appendChild(toast);
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateX(40px)';
+            toast.style.transition = 'all 0.3s ease';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
+    // ──────────── CART LOGIC ────────────
+    function addToCart(menuItem) {
+        const existing = cart.find(item => item.id === menuItem.id);
+        if (existing) existing.qty += 1;
+        else cart.push({ ...menuItem, qty: 1 });
+        saveCart();
+        updateCartUI();
+        showToast(menuItem.name + ' added to your order.', 'success');
+    }
+
+   function removeFromCart(id) {
+
+    cart = cart.filter(
+        item => String(item.id) !== String(id)
+    );
+
+    saveCart();
+    updateCartUI();
+
+    showToast('Item removed from cart.');
+}
+
+
+function updateQty(id, delta) {
+
+    const item = cart.find(
+        item => String(item.id) === String(id)
+    );
+
+    if (!item) return;
+
+    item.qty += delta;
+
+    if (item.qty <= 0) {
+        removeFromCart(id);
+        return;
+    }
+
+    saveCart();
+    updateCartUI();
+}
+
+    function clearCart() {
+        cart = [];
+        saveCart();
+        updateCartUI();
+        showToast('Cart cleared.');
+    }
+
+    function updateCartUI() {
+        const count = getCartCount();
+        const badge = document.getElementById('cartCountBadge');
+        if (count > 0) {
+            badge.style.display = 'flex';
+            badge.textContent = count;
+            badge.style.animation = 'none';
+            badge.offsetHeight;
+            badge.style.animation = 'popIn 0.3s ease';
+        } else {
+            badge.style.display = 'none';
+        }
+        renderCartDrawer();
+    }
+
+    function renderCartDrawer() {
+        const itemsContainer = document.getElementById('cartItems');
+        const footerContainer = document.getElementById('cartFooter');
+        if (cart.length === 0) {
+            itemsContainer.innerHTML = '<div class="cart-empty"><i class="fa-solid fa-basket-shopping"></i><p>Your cart is empty.<br>Let\'s add some good stuff!</p></div>';
+            footerContainer.innerHTML = '';
+        } else {
+            itemsContainer.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                  <img src="${item.image}" alt="${item.name}" class="cart-item-img" loading="lazy">
+                  <div class="cart-item-info">
+                    <h4>${item.name}</h4>
+                    <span class="cart-item-price">PKR ${item.price.toLocaleString()}</span>
+                  </div>
+                  <div class="cart-qty-controls">
+                    <button
+    class="btn-qty btn-qty-minus"
+    onclick="window._tosoUpdateQty('${item.id}', -1)"
+    aria-label="Decrease quantity"
+>
+    <i class="fa-solid fa-minus"></i>
+</button>
+                    <span class="cart-qty-num">${item.qty}</span>
+                   <button
+    class="btn-qty btn-qty-plus"
+    onclick="window._tosoUpdateQty('${item.id}', 1)"
+    aria-label="Increase quantity"
+>
+    <i class="fa-solid fa-plus"></i>
+</button>
+                  </div>
+                  <button
+    class="btn-remove-item"
+    onclick="window._tosoRemoveItem('${item.id}')"
+    aria-label="Remove item"
+>
+    <i class="fa-solid fa-trash-can"></i>
+</button>
+                </div>
+            `).join('');
+            const subtotal = getCartSubtotal();
+            const delivery = subtotal > 0 ? 150 : 0;
+            const total = subtotal + delivery;
+            footerContainer.innerHTML = `
+                <div class="cart-total-row"><span>Subtotal</span><span>PKR ${subtotal.toLocaleString()}</span></div>
+                <div class="cart-total-row"><span>Delivery</span><span>PKR ${delivery.toLocaleString()}</span></div>
+                <div class="cart-total-row total"><span>Total</span><span>PKR ${total.toLocaleString()}</span></div>
+                <div class="cart-footer-btns">
+                  <button class="btn-clear-cart" onclick="window._tosoClearCart()"><i class="fa-solid fa-trash-can"></i> Clear</button>
+                  <button class="btn-checkout" onclick="window._tosoOpenCheckout()">Checkout <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            `;
+        }
+    }
+
+    window._tosoUpdateQty = updateQty;
+    window._tosoRemoveItem = removeFromCart;
+    window._tosoClearCart = clearCart;
+    window._tosoOpenCheckout = openCheckout;
+
+    function openCart() {
+        document.getElementById('cartDrawer').classList.add('open');
+        document.getElementById('cartOverlay').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeCart() {
+        document.getElementById('cartDrawer').classList.remove('open');
+        document.getElementById('cartOverlay').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    // ──────────── LOCATION ────────────
+    window._tosoGetLocation = function() {
+        const btn = document.getElementById('btnLocation');
+        const coordsSpan = document.getElementById('locationCoords');
+        if (!navigator.geolocation) {
+            showToast('Geolocation is not supported by your browser.', 'error');
+            return;
+        }
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Locating...';
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                currentLat = position.coords.latitude;
+                currentLng = position.coords.longitude;
+                coordsSpan.style.display = 'block';
+                coordsSpan.textContent = `📍 Lat: ${currentLat.toFixed(4)}, Lng: ${currentLng.toFixed(4)}`;
+                btn.innerHTML = '<i class="fa-solid fa-circle-check"></i> Location Captured';
+                btn.style.borderColor = '#2d8a2d';
+                btn.style.color = '#2d8a2d';
+                btn.style.backgroundColor = '#f0fdf0';
+                btn.disabled = false;
+                showToast('Location captured successfully!', 'success');
+            },
+            (error) => {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i> Use Current Location';
+                showToast('Unable to retrieve location. Please allow location access.', 'error');
+            },
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        );
+    };
+
+    // ──────────── CHECKOUT ────────────
+    function openCheckout() {
+        if (cart.length === 0) {
+            showToast('Your cart is empty!', 'error');
+            return;
+        }
+        currentLat = null;
+        currentLng = null;
+        const subtotal = getCartSubtotal();
+        const delivery = 150;
+        const total = subtotal + delivery;
+        const modal = document.getElementById('checkoutModal');
+        modal.innerHTML = `
+            <button class="modal-close" onclick="window._tosoCloseCheckout()" aria-label="Close checkout"><i class="fa-solid fa-xmark"></i></button>
+            <h2>CHECKOUT</h2>
+            <div class="order-summary-mini">
+                <p>${getCartCount()} item(s) · Subtotal: PKR ${subtotal.toLocaleString()} · Delivery: PKR ${delivery.toLocaleString()}</p>
+                <strong>Total: PKR ${total.toLocaleString()}</strong>
+            </div>
+            <form id="checkoutForm">
+                <div class="form-group"><label for="chName">Full Name *</label><input type="text" id="chName" required></div>
+                <div class="form-group"><label for="chPhone">Phone *</label><input type="tel" id="chPhone" required></div>
+                <div class="form-group"><label for="chEmail">Email *</label><input type="email" id="chEmail" required></div>
+                <div class="form-group"><label for="chAddress">Delivery Address</label><input type="text" id="chAddress"></div>
+                <div class="form-group"><label for="chOrderType">Order Type *</label>
+                    <select id="chOrderType" required><option value="">Select...</option><option value="Dine In">Dine In</option><option value="Takeaway">Takeaway</option><option value="Delivery">Delivery</option></select>
+                </div>
+                <div class="form-group"><label for="chInstructions">Special Instructions</label><textarea id="chInstructions" rows="2"></textarea></div>
+                <button type="button" class="btn-location" id="btnLocation" onclick="window._tosoGetLocation()">
+                    <i class="fa-solid fa-location-crosshairs"></i> Use Current Location
+                </button>
+                <span class="location-coords" id="locationCoords" style="display:none;"></span>
+                <button type="submit" class="btn-submit-order">Place Order <i class="fa-solid fa-check"></i></button>
+            </form>
+        `;
+        document.getElementById('checkoutOverlay').classList.add('open');
+        document.body.style.overflow = 'hidden';
+        document.getElementById('checkoutForm').addEventListener('submit', handleCheckoutSubmit);
+    }
+
+    window._tosoCloseCheckout = function() {
+        document.getElementById('checkoutOverlay').classList.remove('open');
+        document.body.style.overflow = '';
+    };
+
+    async function handleCheckoutSubmit(e) {
+        e.preventDefault();
+        const name = document.getElementById('chName').value.trim();
+        const phone = document.getElementById('chPhone').value.trim();
+        const email = document.getElementById('chEmail').value.trim();
+        const addressText = document.getElementById('chAddress').value.trim();
+        const selectedOrderType = document.getElementById('chOrderType').value;
+        const notes = document.getElementById('chInstructions').value.trim();
+
+        if (!name || !phone || !email || !selectedOrderType) {
+            showToast('Please fill all required fields.', 'error');
+            return;
+        }
+
+        let orderType;
+        if (selectedOrderType === 'Delivery') orderType = 'delivery';
+        else if (selectedOrderType === 'Dine In') orderType = 'dine_in';
+        else if (selectedOrderType === 'Takeaway') orderType = 'takeaway';
+        else {
+            showToast('Please select a valid order type.', 'error');
+            return;
+        }
+
+        if (orderType === 'delivery' && !addressText && !currentLat) {
+            showToast('Please enter your delivery address or use current location.', 'error');
+            return;
+        }
+
+        const submitButton = document.querySelector('.btn-submit-order');
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Placing Order...';
+        }
+
+        // Build items for backend
+        const orderItems = cart.map(item => ({
+            productId: item.id,
+            name: item.name,
+            price: Number(item.price),
+            quantity: Number(item.qty),
+            image: item.image || ''
+        }));
+
+             const orderData = {
+    customerId: getCustomerId(),
+
+    customer: {
+        name,
+        phone,
+        email
+    },
+
+    orderType,
+
+    items: orderItems,
+
+    address: orderType === 'delivery'
+        ? {
+            text: addressText,
+            latitude: currentLat,
+            longitude: currentLng
+        }
+        : null,
+
+          notes
+     };
+
+        try {
+            const response = await fetch(`${API_BASE}/orders`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(orderData)
+            });
+            const result = await response.json();
+            if (!response.ok || !result.success) {
+                throw new Error(result.message || 'Failed to place order.');
+            }
+
+            const orderNumber = result.data.orderNumber;
+
+            // ⚠️ SAVE ORDER HISTORY BEFORE CLEARING CART
+            const subtotalBeforeClear = getCartSubtotal();
+            const deliveryFee = 150;
+            const totalBeforeClear = subtotalBeforeClear + deliveryFee;
+
+            const historyOrder = {
+                orderNumber,
+                customer: { name, phone, email },
+                items: cart.map(item => ({
+                    productId: item.id,
+                    name: item.name,
+                    price: Number(item.price),
+                    quantity: Number(item.qty),
+                    image: item.image || ''
+                })),
+                orderType: selectedOrderType,
+                address: addressText,
+                latitude: currentLat,
+                longitude: currentLng,
+                notes,
+                date: new Date().toISOString().split('T')[0],
+                status: 'pending',   // status stays pending for display
+                state: 'confirmed',  // state starts as confirmed
+                subtotal: subtotalBeforeClear,
+                delivery: deliveryFee,
+                total: totalBeforeClear
+            };
+            saveOrderToHistory(historyOrder);
+
+            // NOW clear the cart
+            cart = [];
+            saveCart();
+            updateCartUI();
+            closeCart();
+
+            // Show success
+            const modal = document.getElementById('checkoutModal');
+            modal.innerHTML = `
+                <div class="success-state">
+                    <div class="success-icon-wrap"><i class="fa-solid fa-circle-check"></i></div>
+                    <h2>YAY! ORDER CONFIRMED</h2>
+                    <p>Your order number is</p>
+                    <div class="success-order-num">${orderNumber}</div>
+                    <p style="color:#666;">We'll get cooking right away!<br>A confirmation has been sent to ${email}.</p>
+                    <button class="btn-submit-order" style="margin-top:20px;width:auto;padding:14px 40px;" onclick="window._tosoCloseCheckout()">Got It!</button>
+                </div>
+            `;
+            showToast('Order ' + orderNumber + ' confirmed!', 'success');
+        } catch (error) {
+            console.error('TOSO order submission error:', error);
+            showToast(error.message || 'Unable to place your order.', 'error');
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.innerHTML = 'Place Order <i class="fa-solid fa-check"></i>';
+            }
+        }
+    }
+
+    // ──────────── MENU RENDERING ────────────
+    function renderFilters() {
+        const container = document.getElementById('menuFilters');
+        container.innerHTML = categories.map(cat => `
+            <button class="menu-filter-btn${cat.key === currentCategory ? ' active' : ''}" data-category="${cat.key}">${cat.label}</button>
+        `).join('');
+        container.querySelectorAll('.menu-filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentCategory = btn.dataset.category;
+                renderFilters();
+                renderMenu();
+            });
+        });
+    }
+
+    function renderMenu() {
+    const grid = document.getElementById('menuGrid');
+
+    const filtered =
+        currentCategory === 'all'
+            ? menuData
+            : menuData.filter(item => item.category === currentCategory);
+
+    if (filtered.length === 0) {
+        grid.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align:center; padding:40px;">
+                <p>No menu items available.</p>
+            </div>
+        `;
+        return;
+    }
+
+    grid.innerHTML = filtered.map(item => `
+        <div class="menu-card" style="animation: fadeIn 0.4s ease;">
+            <img
+                src="${item.image}"
+                alt="${item.name}"
+                class="menu-card-img"
+                loading="lazy"
+            >
+
+            <div class="menu-card-body">
+                <h3>${item.name}</h3>
+
+                <p class="menu-desc">
+                    ${item.description}
+                </p>
+
+                <div class="menu-card-footer">
+                    <span class="menu-price">
+                        PKR ${Number(item.price).toLocaleString()}
+                    </span>
+
+                    <button
+                        class="btn-add"
+                        onclick="window._tosoAddToCart('${item.id}')"
+                    >
+                        <i class="fa-solid fa-plus"></i>
+                        Add
+                    </button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+    window._tosoAddToCart = function(id) {
+    const item = menuData.find(m => String(m.id) === String(id));
+
+    if (item) {
+        addToCart(item);
+    }
+};
+
+window._tosoAddSpecialToCart = function(id) {
+
+    const item = specialsData.find(
+        special =>
+            String(special.id) === String(id)
+    );
+
+    if (!item) {
+        showToast(
+            'Chef Special could not be found.',
+            'error'
+        );
+        return;
+    }
+
+    addToCart(item);
+
+};
+
+    // ──────────── GALLERY / LIGHTBOX ────────────
+    function renderGallery() {
+        const container = document.getElementById('galleryGrid');
+        container.innerHTML = galleryImages.map((img, i) => `
+            <div class="gallery-item" data-index="${i}" onclick="window._tosoOpenLightbox(${i})">
+                <img src="${img.src}" alt="${img.alt}" loading="lazy">
+            </div>
+        `).join('');
+    }
+
+    window._tosoOpenLightbox = function(index) {
+        lightboxIndex = index;
+        updateLightboxImage();
+        document.getElementById('lightboxOverlay').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    };
+
+    function updateLightboxImage() {
+        const img = galleryImages[lightboxIndex];
+        document.getElementById('lightboxImg').src = img.src;
+        document.getElementById('lightboxImg').alt = img.alt;
+    }
+
+    function closeLightbox() {
+        document.getElementById('lightboxOverlay').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    function lightboxPrev() {
+        lightboxIndex = (lightboxIndex - 1 + galleryImages.length) % galleryImages.length;
+        updateLightboxImage();
+    }
+
+    function lightboxNext() {
+        lightboxIndex = (lightboxIndex + 1) % galleryImages.length;
+        updateLightboxImage();
+    }
+
+    // ──────────── FORM HANDLERS ────────────
+    document.getElementById('contactForm').addEventListener('submit', async function(e) {
+
+    e.preventDefault();
+
+    const form = this;
+
+    const name =
+    form.querySelector('[name="name"]').value.trim();
+
+const phone =
+    form.querySelector('[name="phone"]').value.trim();
+
+const email =
+    form.querySelector('[name="email"]').value.trim();
+
+const subject =
+    form.querySelector('[name="subject"]')?.value.trim() || "";
+
+const message =
+    form.querySelector('[name="message"]').value.trim();
+
+
+    // ========================================
+    // VALIDATION
+    // ========================================
+
+    if (!name || !phone || !email || !message)  {
+
+        showToast(
+            'Please fill all required fields.',
+            'error'
+        );
+
+        return;
+    }
+
+
+    // ========================================
+    // SUBMIT BUTTON
+    // ========================================
+
+    const submitButton =
+        form.querySelector('button[type="submit"]');
+
+    if (submitButton) {
+
+        submitButton.disabled = true;
+
+        submitButton.innerHTML = `
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            Sending...
+        `;
+    }
+
+
+    try {
+
+        // ========================================
+        // SEND TO BACKEND
+        // ========================================
+
+        const response = await fetch(
+            `${API_BASE}/inquiries`,
+            {
+                method: 'POST',
+
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+
+                body: JSON.stringify({
+    name,
+    phone,
+    email,
+    subject,
+    message
+})
+            }
+        );
+
+
+        const result = await response.json();
+
+
+        // ========================================
+        // CHECK RESPONSE
+        // ========================================
+
+        if (
+            !response.ok ||
+            !result.success
+        ) {
+
+            throw new Error(
+                result.message ||
+                'Failed to send your message.'
+            );
+        }
+
+
+        // ========================================
+        // SUCCESS
+        // ========================================
+
+        showToast(
+            'Message sent! We\'ll get back to you soon.',
+            'success'
+        );
+
+
+        form.reset();
+
+
+    } catch (error) {
+
+        console.error(
+            '❌ Contact form error:',
+            error
+        );
+
+        showToast(
+            error.message ||
+            'Unable to send your message.',
+            'error'
+        );
+
+
+    } finally {
+
+        // ========================================
+        // RESTORE BUTTON
+        // ========================================
+
+        if (submitButton) {
+
+            submitButton.disabled = false;
+
+            submitButton.innerHTML =
+                'Send Message <i class="fa-solid fa-paper-plane"></i>';
+        }
+    }
+
+});
+
+    document.getElementById('newsletterForm').addEventListener(
+    'submit',
+    async function(e) {
+
+        e.preventDefault();
+
+        const email =
+            this.querySelector('input')
+                .value
+                .trim();
+
+        if (!email) {
+            showToast(
+                'Please enter your email.',
+                'error'
+            );
+            return;
+        }
+
+        const submitButton =
+            this.querySelector('button');
+
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.innerHTML =
+                '<i class="fa-solid fa-spinner fa-spin"></i> Subscribing...';
+        }
+
+        try {
+
+            const response = await fetch(
+                `${API_BASE}/subscribers`,
+                {
+                    method: 'POST',
+
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+
+                    body: JSON.stringify({
+                        email
+                    })
+                }
+            );
+
+            const result =
+                await response.json();
+
+            if (!response.ok || !result.success) {
+                throw new Error(
+                    result.message ||
+                    'Failed to subscribe.'
+                );
+            }
+
+            showToast(
+                'Welcome to the TOSO family! You\'re now subscribed.',
+                'success'
+            );
+
+            this.reset();
+
+        } catch (error) {
+
+            console.error(
+                '❌ Newsletter subscription error:',
+                error
+            );
+
+            showToast(
+                error.message ||
+                'Unable to subscribe right now.',
+                'error'
+            );
+
+        } finally {
+
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.innerHTML =
+                    'Subscribe';
+            }
+        }
+    }
+);
+
+    // ──────────── NAVBAR SCROLL ────────────
+    const navbar = document.getElementById('navbar');
+    function handleScroll() {
+        if (window.scrollY > 50) navbar.classList.add('scrolled');
+        else navbar.classList.remove('scrolled');
+        const btn = document.getElementById('backToTop');
+        if (window.scrollY > 500) btn.classList.add('visible');
+        else btn.classList.remove('visible');
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    document.getElementById('backToTop').addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // ──────────── MOBILE NAV ────────────
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const mobileNavPanel = document.getElementById('mobileNavPanel');
+    const mobileNavOverlay = document.getElementById('mobileNavOverlay');
+    const mobileNavClose = document.getElementById('mobileNavClose');
+    const mobileNavLinks = mobileNavPanel.querySelectorAll('a');
+
+    function openMobileNav() {
+        mobileNavPanel.classList.add('open');
+        mobileNavOverlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeMobileNav() {
+        mobileNavPanel.classList.remove('open');
+        mobileNavOverlay.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+    hamburgerBtn.addEventListener('click', openMobileNav);
+    mobileNavClose.addEventListener('click', closeMobileNav);
+    mobileNavOverlay.addEventListener('click', closeMobileNav);
+    mobileNavLinks.forEach(link => link.addEventListener('click', closeMobileNav));
+
+    // ──────────── CART DRAWER EVENTS ────────────
+    document.getElementById('cartNavBtn').addEventListener('click', openCart);
+    document.getElementById('cartClose').addEventListener('click', closeCart);
+    document.getElementById('cartOverlay').addEventListener('click', closeCart);
+
+    // ──────────── CHECKOUT OVERLAY CLICK ────────────
+    document.getElementById('checkoutOverlay').addEventListener('click', function(e) {
+        if (e.target === this) window._tosoCloseCheckout();
+    });
+
+    // ──────────── LIGHTBOX EVENTS ────────────
+    document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+    document.getElementById('lightboxPrev').addEventListener('click', lightboxPrev);
+    document.getElementById('lightboxNext').addEventListener('click', lightboxNext);
+    document.getElementById('lightboxOverlay').addEventListener('click', function(e) {
+        if (e.target === this) closeLightbox();
+    });
+    document.addEventListener('keydown', function(e) {
+        const lightboxOpen = document.getElementById('lightboxOverlay').classList.contains('open');
+        const checkoutOpen = document.getElementById('checkoutOverlay').classList.contains('open');
+        if (e.key === 'Escape') {
+            if (lightboxOpen) closeLightbox();
+            if (checkoutOpen) window._tosoCloseCheckout();
+            if (document.getElementById('cartDrawer').classList.contains('open')) closeCart();
+            if (mobileNavPanel.classList.contains('open')) closeMobileNav();
+        }
+        if (lightboxOpen && e.key === 'ArrowLeft') lightboxPrev();
+        if (lightboxOpen && e.key === 'ArrowRight') lightboxNext();
+    });
+
+    // ──────────── INTERSECTION OBSERVER ────────────
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                revealObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // ═══════════════ MY ORDER DRAWER ═══════════════
+    const orderDrawer = document.getElementById('orderDrawer');
+    const orderOverlay = document.getElementById('orderOverlay');
+    const orderCloseBtn = document.getElementById('orderClose');
+    const orderItemsContainer = document.getElementById('orderItems');
+
+                 // ──────────── LOAD ORDERS FROM BACKEND ────────────
+
+async function loadOrdersFromBackend() {
+    if (!orderItemsContainer) return;
+
+    const customerId = getCustomerId();
+
+    if (!customerId) {
+        orderItemsContainer.innerHTML = `
+            <div class="order-empty">
+                <i class="fa-solid fa-receipt"></i>
+                <p>No customer session found.<br>Please place an order first.</p>
+            </div>
+        `;
+        return;
+    }
+
+    // Show loading state
+    orderItemsContainer.innerHTML = `
+        <div class="order-empty">
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            <p>Loading your orders...</p>
+        </div>
+    `;
+
+    try {
+        const response = await fetch(
+            `${API_BASE}/orders/customer/${encodeURIComponent(customerId)}`
+        );
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(
+                result.message || "Failed to load orders."
+            );
+        }
+
+        // Store the backend result in memory only.
+        // MongoDB remains the source of truth.
+          const orders = (result.data || []).filter(
+    order => order.state !== "cancelled"
+);
+
+renderOrderDrawer(orders);
+
+    } catch (error) {
+        console.error(
+            "TOSO order history error:",
+            error
+        );
+
+        orderItemsContainer.innerHTML = `
+            <div class="order-empty">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <p>Unable to load your orders.<br>Please try again.</p>
+            </div>
+        `;
+
+        showToast(
+            "Unable to load your orders.",
+            "error"
+        );
+    }
+}
+
+           async function openOrderDrawer() {
+    orderDrawer.classList.add('open');
+    orderOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+
+    await loadOrdersFromBackend();
+}
+
+    function closeOrderDrawer() {
+        orderDrawer.classList.remove('open');
+        orderOverlay.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    // ========================================
+// CANCEL ORDER
+// ========================================
+
+window._tosoCancelOrder = async function(orderNumber) {
+
+    if (!orderNumber) {
+        showToast(
+            "Invalid order.",
+            "error"
+        );
+        return;
+    }
+
+    // ========================================
+    // CONFIRMATION
+    // ========================================
+
+    const confirmed = confirm(
+        "Are you sure you want to cancel this order?"
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    try {
+
+        // ========================================
+        // SHOW LOADING STATE
+        // ========================================
+
+        const button = document.querySelector(
+            `[onclick="window._tosoCancelOrder('${orderNumber}')"]`
+        );
+
+        if (button) {
+            button.disabled = true;
+            button.innerHTML = `
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                Cancelling...
+            `;
+        }
+
+        // ========================================
+        // SEND CANCELLATION REQUEST
+        // ========================================
+
+        const response = await fetch(
+            `${API_BASE}/orders/${encodeURIComponent(orderNumber)}/cancel`,
+            {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }
+        );
+
+        const result = await response.json();
+
+        // ========================================
+        // HANDLE BACKEND RESPONSE
+        // ========================================
+
+        if (!response.ok || !result.success) {
+
+            showToast(
+                result.message ||
+                "This order cannot be cancelled at this point.",
+                "error"
+            );
+
+            // Restore button
+            if (button) {
+                button.disabled = false;
+                button.innerHTML = `
+                    <i class="fa-solid fa-xmark"></i>
+                    Cancel Order
+                `;
+            }
+
+            return;
+        }
+
+        // ========================================
+        // SUCCESS
+        // ========================================
+
+        showToast(
+            "Order cancelled successfully.",
+            "success"
+        );
+
+        // ========================================
+        // RELOAD ORDERS FROM MONGODB
+        // ========================================
+
+        await loadOrdersFromBackend();
+
+    } catch (error) {
+
+        console.error(
+            "❌ Cancel order error:",
+            error
+        );
+
+        showToast(
+            "Unable to cancel the order. Please try again.",
+            "error"
+        );
+
+        // Restore button if possible
+        const button = document.querySelector(
+            `[onclick="window._tosoCancelOrder('${orderNumber}')"]`
+        );
+
+        if (button) {
+            button.disabled = false;
+            button.innerHTML = `
+                <i class="fa-solid fa-xmark"></i>
+                Cancel Order
+            `;
+        }
+    }
+};
+
+    
+                 function renderOrderDrawer(orders = []) {
+    if (!orderItemsContainer) return;
+
+    if (!orders || orders.length === 0) {
+        orderItemsContainer.innerHTML = `
+            <div class="order-empty">
+                <i class="fa-solid fa-receipt"></i>
+                <p>No orders yet.<br>Place an order and it will appear here!</p>
+            </div>
+        `;
+        return;
+    }
+
+    orderItemsContainer.innerHTML = orders.map(order => {
+
+        const createdDate = order.createdAt
+            ? new Date(order.createdAt).toLocaleDateString()
+            : 'N/A';
+
+        const total = Number(
+            order.pricing?.total || 0
+        );
+
+        const status = order.status || 'pending';
+
+        const addressText =
+            order.address?.text || '';
+
+        const latitude =
+            order.address?.latitude ?? null;
+
+        const longitude =
+            order.address?.longitude ?? null;
+
+        const orderType =
+            order.orderType || 'N/A';
+
+        return `
+            <div class="order-card">
+
+                <!-- ORDER HEADER -->
+                <div class="order-card-header">
+
+                    <span class="order-id">
+                        ${order.orderNumber}
+                    </span>
+
+                    <span class="order-date">
+                        ${createdDate}
+                    </span>
+
+                    <span
+                        class="order-status"
+                        id="status-${order.orderNumber}"
+                    >
+                        ${status}
+                    </span>
+
+                </div>
+
+
+              <!-- ORDER ITEMS -->
+<div class="order-items-list">
+
+    ${(order.items || []).map(item => {
+
+        const menuItem = menuData.find(
+            product => String(product.id) === String(item.productId)
+        );
+
+        const itemImage =
+            menuItem?.image ||
+            'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop';
+
+        return `
+            <div class="order-item-row">
+
+                <img
+                    src="${itemImage}"
+                    alt="${item.name}"
+                    class="order-item-img"
+                    loading="lazy"
+                >
+
+                <div class="order-item-info">
+
+                    <h4>
+                        ${item.name}
+                    </h4>
+
+                    <span>
+                        PKR ${Number(item.price).toLocaleString()} each
+                    </span>
+
+                </div>
+
+                <span class="order-item-qty">
+                    x${item.quantity}
+                </span>
+
+            </div>
+        `;
+
+    }).join('')}
+
+</div>
+
+
+                <!-- TOTAL -->
+                <div class="order-total-row">
+
+                    <span>
+                        Total
+                    </span>
+
+                    <span>
+                        PKR ${total.toLocaleString()}
+                    </span>
+
+                </div>
+
+
+                <!-- CUSTOMER / ORDER DETAILS -->
+                <p style="font-size:0.8rem;color:#888;margin-top:6px;">
+
+                    <strong>Name:</strong>
+                    ${order.customer?.name || 'N/A'}
+
+                    |
+
+                    <strong>Type:</strong>
+                    ${orderType}
+
+                    ${
+                        addressText
+                            ? `| <strong>Address:</strong> ${addressText}`
+                            : ''
+                    }
+
+                    ${
+                        latitude !== null
+                            ? `| <strong>Lat:</strong> ${latitude}`
+                            : ''
+                    }
+
+                    ${
+                        longitude !== null
+                            ? `| <strong>Lng:</strong> ${longitude}`
+                            : ''
+                    }
+
+                </p>
+
+
+                <!-- CANCEL BUTTON -->
+                ${
+                    status === 'pending' &&
+                    order.state === 'active'
+                        ? `
+                            <button
+                                class="order-cancel-btn"
+                                onclick="window._tosoCancelOrder('${order.orderNumber}')"
+                            >
+                                <i class="fa-solid fa-xmark"></i>
+                                Cancel Order
+                            </button>
+                        `
+                        : ''
+                }
+
+            </div>
+        `;
+
+    }).join('');
+}
+
+    // Drawer event listeners
+    orderCloseBtn.addEventListener('click', closeOrderDrawer);
+    orderOverlay.addEventListener('click', closeOrderDrawer);
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && orderDrawer.classList.contains('open')) {
+            closeOrderDrawer();
+        }
+    });
+
+    // Nav links for the drawer
+    document.getElementById('myOrderNavLink')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        openOrderDrawer();
+    });
+    document.getElementById('mobileMyOrderLink')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        closeMobileNav();
+        openOrderDrawer();
+    });
+
+    // ──────────── INIT ────────────
+   async function init() {
+
+    loadCart();
+
+    await loadMenuFromDatabase();
+
+    await loadSpecialsFromDatabase();
+
+    renderGallery();
+    updateCartUI();
+    handleScroll();
+}
+
+init();
+})();
+</script>
+</body>
+</html>
