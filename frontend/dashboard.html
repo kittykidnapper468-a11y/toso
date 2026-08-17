@@ -1087,9 +1087,12 @@ function normalizeOrder(order) {
             order.address?.longitude ?? null,
 
         items:
-            Array.isArray(order.items)
-                ? order.items.map(item => item.name)
-                : [],
+    Array.isArray(order.items)
+        ? order.items.map(item => ({
+            name: item.name,
+            quantity: item.quantity
+        }))
+        : [],
 
         total:
             order.pricing?.total || 0,
@@ -1398,7 +1401,12 @@ if (filterType === 'completed') {
                                 ? `<a href="https://www.google.com/maps?q=${o.latitude},${o.longitude}" target="_blank" class="map-link" title="Open location"><i class="fa-solid fa-map-location-dot"></i></a>`
                                 : '—'}
                             </td>
-                            <td>${o.items.join(', ')}</td>
+<td>
+    ${o.items
+        .map(item => `${item.name} x${item.quantity}`)
+        .join(', ')
+    }
+</td>
                             <td>PKR ${o.total}</td>
                             <td>${o.date}</td>
                             <td><span class="status-badge status-${o.status}">${o.status}</span></td>
