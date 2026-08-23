@@ -11,6 +11,8 @@ const menuRoutes = require("./routes/menuRoutes");
 const chefsSpecialRoutes = require("./routes/chefsSpecialRoutes");
 const inquiryRoutes = require("./routes/inquiryRoutes");
 const subscriberRoutes = require("./routes/subscriberRoutes");
+const riderRoutes = require("./routes/riderRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 
 const app = express();
 
@@ -40,6 +42,16 @@ const io = new Server(server, {
 app.set("io", io);
 
 // ========================================
+// ONLINE RIDER PRESENCE
+// ========================================
+
+// riderId -> Set of connected socket IDs
+const onlineRiders = new Map();
+
+// Make it available to routes
+app.set("onlineRiders", onlineRiders);
+
+// ========================================
 // MIDDLEWARE
 // ========================================
 
@@ -60,6 +72,10 @@ app.use("/api/chefs-special", chefsSpecialRoutes);
 app.use("/api/inquiries", inquiryRoutes);
 
 app.use("/api/subscribers", subscriberRoutes);
+
+app.use("/api/riders", riderRoutes.router);
+
+app.use("/api/admin", adminRoutes.router);
 
 // ========================================
 // TEST ROUTE
@@ -87,36 +103,205 @@ app.get("/api/health", (req, res) => {
 // SOCKET CONNECTION
 // ========================================
 
+// ========================================
+// SOCKET CONNECTION
+// ========================================
+
 io.on("connection", (socket) => {
-    
 
     console.log(
         "🔌 Socket connected:",
         socket.id
     );
 
-socket.on("joinCustomerRoom", ({ customerId }) => {
 
-    if (!customerId) {
-        return;
-    }
+    // ========================================
+    // CUSTOMER ROOM
+    // EXISTING FUNCTIONALITY
+    // ========================================
 
-    socket.join(`customer:${customerId}`);
+    socket.on(
+        "joinCustomerRoom",
+        ({ customerId }) => {
 
-    console.log(
-        `👤 Customer joined room: customer:${customerId}`
+            if (!customerId) {
+                return;
+            }
+
+            socket.join(
+                `customer:${customerId}`
+            );
+
+            console.log(
+                `👤 Customer joined room: customer:${customerId}`
+            );
+        }
     );
 
-});
 
-    socket.on("disconnect", () => {
+    // ========================================
+    // RIDER AUTHENTICATION
+    // ========================================
 
-        console.log(
-            "🔌 Socket disconnected:",
-            socket.id
-        );
+    const riderToken =
+        socket.handshake.auth?.token;
 
-    });
+    if (riderToken) {
+
+        try {
+
+            if (!process.env.RIDER_JWT_SECRET) {
+
+                console.warn(
+                    "⚠️ RIDER_JWT_SECRET is not configured."
+                );
+
+            } else {
+
+                const decoded =
+                    require("jsonwebtoken").verify(
+                        riderToken,
+                        process.env.RIDER_JWT_SECRET
+                    );
+
+                if (
+                    decoded &&
+                    decoded.role === "rider" &&
+                    decoded.riderId
+                ) {
+
+                    const riderId =
+                        decoded.riderId;
+
+
+                    // ========================================
+                    // STORE SOCKET
+                    // ========================================
+
+                    if (
+                        !onlineRiders.has(riderId)
+                    ) {
+
+                        onlineRiders.set(
+                            riderId,
+                            new Set()
+                        );
+                    }
+
+                    onlineRiders
+                        .get(riderId)
+                        .add(socket.id);
+
+
+                    // ========================================
+                    // JOIN RIDER ROOM
+                    // ========================================
+
+                    socket.join(
+                        `rider:${riderId}`
+                    );
+
+
+                    // Store rider ID on socket
+                    socket.riderId =
+                        riderId;
+
+
+                    console.log(
+                        `🟢 Rider online: ${riderId}`
+                    );
+
+
+                    // ========================================
+                    // NOTIFY DASHBOARD
+                    // ========================================
+
+                    io.emit(
+                        "riderPresenceUpdated",
+                        {
+                            riderId,
+                            online: true
+                        }
+                    );
+                }
+
+            }
+
+        } catch (error) {
+
+            console.warn(
+                "⚠️ Invalid rider socket token."
+            );
+
+        }
+    }
+
+
+    // ========================================
+    // DISCONNECT
+    // ========================================
+
+    socket.on(
+        "disconnect",
+        () => {
+
+            console.log(
+                "🔌 Socket disconnected:",
+                socket.id
+            );
+
+
+            // ========================================
+            // RIDER OFFLINE
+            // ========================================
+
+            if (socket.riderId) {
+
+                const riderId =
+                    socket.riderId;
+
+                const riderSockets =
+                    onlineRiders.get(
+                        riderId
+                    );
+
+
+                if (riderSockets) {
+
+                    riderSockets.delete(
+                        socket.id
+                    );
+
+
+                    // Only mark offline
+                    // when NO other rider
+                    // tabs/connections remain
+                    if (
+                        riderSockets.size === 0
+                    ) {
+
+                        onlineRiders.delete(
+                            riderId
+                        );
+
+
+                        io.emit(
+                            "riderPresenceUpdated",
+                            {
+                                riderId,
+                                online: false
+                            }
+                        );
+
+
+                        console.log(
+                            `🔴 Rider offline: ${riderId}`
+                        );
+                    }
+                }
+            }
+        }
+    );
 
 });
 

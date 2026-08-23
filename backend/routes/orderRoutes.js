@@ -578,13 +578,44 @@ const result = await db
 
 const io = req.app.get("io");
 
-io.to(`customer:${order.customerId}`).emit(
-    "orderStatusUpdated",
-    {
-        orderNumber: order.orderNumber,
-        status: normalizedStatus
+if (io) {
+
+    // ========================================
+    // CUSTOMER STATUS UPDATE
+    // ========================================
+
+    if (order.customerId) {
+
+        io.to(`customer:${order.customerId}`).emit(
+            "orderStatusUpdated",
+            {
+                orderNumber:
+                    order.orderNumber,
+
+                status:
+                    normalizedStatus
+            }
+        );
     }
-);
+
+    // ========================================
+    // DASHBOARD STATUS UPDATE
+    // ========================================
+
+    io.emit(
+        "dashboardOrderStatusUpdated",
+        {
+            orderNumber:
+                order.orderNumber,
+
+            status:
+                normalizedStatus,
+
+            customerId:
+                order.customerId
+        }
+    );
+}
 
     // ========================================
     // 7. CHECK UPDATE
@@ -597,6 +628,34 @@ io.to(`customer:${order.customerId}`).emit(
                 "Order status could not be updated."
         });
     }
+
+      // ========================================
+// RIDER COMPLETED ORDER
+// ========================================
+
+if (
+    normalizedStatus === "completed" &&
+    order.riderId
+) {
+
+    const io = req.app.get("io");
+
+    if (io) {
+
+        io.emit("riderOrderCompleted", {
+            orderNumber: order.orderNumber,
+
+            riderId:
+                order.riderId.toString
+                    ? order.riderId.toString()
+                    : order.riderId,
+
+            riderName:
+                order.riderName || "Unknown Rider"
+        });
+
+    }
+}
 
     // ========================================
     // 8. RETURN UPDATED ORDER
@@ -905,6 +964,298 @@ io.to(`customer:${order.customerId}`).emit(
 }
 
 
+});
+
+// ========================================
+// PATCH /api/orders/:orderNumber/assign-rider
+// ADMIN: ASSIGN ORDER TO RIDER
+// ========================================
+
+router.patch("/:orderNumber/assign-rider", async (req, res) => {
+
+    try {
+
+        const { orderNumber } = req.params;
+        const { riderId } = req.body;
+
+        // ========================================
+        // VALIDATE RIDER ID
+        // ========================================
+
+        if (!riderId) {
+
+            return res.status(400).json({
+                success: false,
+                message: "Rider ID is required."
+            });
+
+        }
+
+        const { ObjectId } = require("mongodb");
+
+        if (!ObjectId.isValid(riderId)) {
+
+            return res.status(400).json({
+                success: false,
+                message: "Invalid rider ID."
+            });
+
+        }
+
+        const db = getDb();
+
+        // ========================================
+        // FIND ORDER
+        // ========================================
+
+        const order = await db
+            .collection("orders")
+            .findOne({
+                orderNumber
+            });
+
+        if (!order) {
+
+            return res.status(404).json({
+                success: false,
+                message: "Order not found."
+            });
+
+        }
+
+        // ========================================
+        // DON'T ASSIGN COMPLETED ORDERS
+        // ========================================
+
+        if (
+            order.status === "completed" ||
+            order.state === "cancelled" ||
+            order.status === "cancelled"
+        ) {
+
+            return res.status(409).json({
+                success: false,
+                message:
+                    "Completed or cancelled orders cannot be assigned."
+            });
+
+        }
+
+        // ========================================
+        // FIND RIDER
+        // ========================================
+
+        const rider = await db
+            .collection("riders")
+            .findOne({
+                _id: new ObjectId(riderId)
+            });
+
+        if (!rider) {
+
+            return res.status(404).json({
+                success: false,
+                message: "Rider not found."
+            });
+
+        }
+
+        // ========================================
+        // CHECK ADMIN AVAILABILITY
+        // ========================================
+
+        if (rider.available === false) {
+
+            return res.status(409).json({
+                success: false,
+                message:
+                    "This rider is currently unavailable."
+            });
+
+        }
+
+        // ========================================
+        // CHECK LIVE ONLINE PRESENCE
+        // ========================================
+
+        const onlineRiders =
+            req.app.get("onlineRiders");
+
+        const riderIsOnline =
+            onlineRiders &&
+            onlineRiders.has(
+                rider._id.toString()
+            );
+
+        if (!riderIsOnline) {
+
+            return res.status(409).json({
+                success: false,
+                message:
+                    "This rider is currently offline."
+            });
+
+        }
+
+        // ========================================
+        // ASSIGN RIDER
+        // ========================================
+
+        const assignedAt = new Date();
+
+        const result = await db
+            .collection("orders")
+            .updateOne(
+                {
+                    _id: order._id
+                },
+                {
+                    $set: {
+                        riderId: rider._id,
+                        riderName: rider.name,
+                        assignedAt
+                    }
+                }
+            );
+
+        if (result.matchedCount !== 1) {
+
+            return res.status(404).json({
+                success: false,
+                message:
+                    "Order could not be updated."
+            });
+
+        }
+
+        // ========================================
+        // GET UPDATED ORDER
+        // ========================================
+
+        const updatedOrder = await db
+            .collection("orders")
+            .findOne({
+                _id: order._id
+            });
+
+        // ========================================
+        // SOCKET: SEND TO RIDER
+        // ========================================
+
+        const io = req.app.get("io");
+
+        if (io) {
+
+            io.to(`rider:${rider._id.toString()}`)
+                .emit(
+                    "orderAssigned",
+                    {
+                        orderNumber:
+                            updatedOrder.orderNumber,
+
+                        riderId:
+                            rider._id.toString(),
+
+                        riderName:
+                            rider.name,
+
+                        order:
+                            updatedOrder
+                    }
+                );
+
+            // ========================================
+            // SOCKET: UPDATE DASHBOARD
+            // ========================================
+
+            io.emit(
+                "orderRiderUpdated",
+                {
+                    orderNumber:
+                        updatedOrder.orderNumber,
+
+                    riderId:
+                        rider._id.toString(),
+
+                    riderName:
+                        rider.name
+                }
+            );
+        }
+
+        // ========================================
+        // RESPONSE
+        // ========================================
+
+        return res.status(200).json({
+
+            success: true,
+
+            message:
+                "Rider assigned successfully.",
+
+            data:
+                updatedOrder
+        });
+
+    } catch (error) {
+
+        console.error(
+            "❌ Error assigning rider:"
+        );
+
+        console.error(error);
+
+        return res.status(500).json({
+            success: false,
+            message:
+                "Failed to assign rider."
+        });
+    }
+});
+
+
+// ========================================
+// DELETE /api/orders
+// DELETE ALL ORDERS (ADMIN ONLY)
+// ========================================
+
+router.delete("/", async (req, res) => {
+    try {
+        const db = getDb();
+
+        // Delete all documents from the orders collection
+        const result = await db
+            .collection("orders")
+            .deleteMany({});
+
+        // ========================================
+        // SOCKET: NOTIFY DASHBOARD
+        // ========================================
+        const io = req.app.get("io");
+
+        if (io) {
+            io.emit("allOrdersCleared", {
+                deletedCount: result.deletedCount
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "All orders have been cleared.",
+            data: {
+                deletedCount: result.deletedCount
+            }
+        });
+    } catch (error) {
+        console.error("❌ Error clearing all orders:");
+        console.error(error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Failed to clear orders."
+        });
+    }
 });
 
 module.exports = router;

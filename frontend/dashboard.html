@@ -360,9 +360,14 @@
             white-space: nowrap;
         }
         .btn-danger {
-            background: #fff0f0;
+            background: #f8f0ff;
             color: var(--coral);
             border: 1px solid #ffd6d6;
+        }
+        .btn-danger-2 {
+            background: #58008b;
+            color: white;
+            /* border: 1px solid #4e004a; */
         }
         .btn-danger:hover {
             background: #ffe8e8;
@@ -388,6 +393,50 @@
             border-color: transparent;
         }
 
+/* Availability toggle switch */
+.form-group input[type="checkbox"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 46px;
+    height: 26px;
+    background: #ddd;
+    border-radius: 13px;
+    position: relative;
+    outline: none;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    flex-shrink: 0;
+    margin: 0;
+}
+
+.form-group input[type="checkbox"]::after {
+    content: "";
+    position: absolute;
+    top: 1.5px;
+    left: 1px;
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.form-group input[type="checkbox"]:checked {
+    background: var(--vibrant-purple);
+}
+
+.form-group input[type="checkbox"]:checked::after {
+    transform: translateX(20px);
+}
+
+.form-group label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
         .actions {
             display: flex;
             gap: 8px;
@@ -397,7 +446,14 @@
             padding-bottom: 4px;
         }
         .address-cell {
-            max-width: 150px;
+            min-width: 200px;
+    max-width: 320px;
+            word-break: break-word;
+            white-space: normal;
+        }
+        .notes-cell {
+            min-width: 200px;
+    max-width: 320px;
             word-break: break-word;
             white-space: normal;
         }
@@ -730,6 +786,7 @@
             <li><a href="#chefs-special" data-page="chefs-special"><i class="fa-solid fa-star"></i> Chef's Special</a></li>
             <li><a href="#inquiries" data-page="inquiries"><i class="fa-solid fa-message"></i> Inquiries</a></li>
             <li><a href="#subscribers" data-page="subscribers"><i class="fa-solid fa-envelope"></i> Subscribers</a></li>
+            <li><a href="#riders" data-page="riders"><i class="fa-solid fa-motorcycle"></i> Riders</a></li>
         </ul>
         <div class="sidebar-footer">
             <a href="index.html" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> View Website</a>
@@ -760,6 +817,86 @@
     <script>
         (function() {
             const API_BASE = 'http://localhost:5000/api';
+
+            async function protectAdminDashboard() {
+
+    const token =
+        sessionStorage.getItem(
+            "tosoAdminToken"
+        );
+
+    if (!token) {
+
+        window.location.replace(
+            "adminlogin.html"
+        );
+
+        return;
+    }
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_BASE}/admin/me`,
+                {
+                    headers: {
+                        Authorization:
+                            `Bearer ${token}`
+                    }
+                }
+            );
+
+        const result =
+            await response.json();
+
+        if (
+            !response.ok ||
+            !result.success
+        ) {
+
+            sessionStorage.removeItem(
+                "tosoAdminToken"
+            );
+
+            sessionStorage.removeItem(
+                "tosoAdmin"
+            );
+
+            window.location.replace(
+                "adminlogin.html"
+            );
+
+            return;
+        }
+
+        console.log(
+            "✅ Admin authenticated:",
+            result.data.username
+        );
+
+    } catch (error) {
+
+        console.error(
+            "❌ Admin authentication failed:",
+            error
+        );
+
+        sessionStorage.removeItem(
+            "tosoAdminToken"
+        );
+
+        sessionStorage.removeItem(
+            "tosoAdmin"
+        );
+
+        window.location.replace(
+            "adminlogin.html"
+        );
+    }
+}
+
+protectAdminDashboard();
 
             const SOCKET_BASE =
     API_BASE.replace("/api", "");
@@ -818,6 +955,69 @@ socket.on("orderCancelled", async (data) => {
     navigateTo(currentPage);
 
 });
+
+socket.on(
+    "riderPresenceUpdated",
+    async (data) => {
+
+        console.log(
+            "🏍️ Rider presence updated:",
+            data
+        );
+
+        await loadRiders();
+
+        if (
+            currentPage === "riders"
+        ) {
+            navigateTo("riders");
+        }
+    }
+);
+
+// ========================================
+// ORDER STATUS UPDATED
+// ========================================
+
+socket.on(
+    "dashboardOrderStatusUpdated",
+    async (data) => {
+
+        console.log(
+            "🔄 DASHBOARD ORDER STATUS UPDATED:",
+            data
+        );
+
+        await loadOrders();
+
+        navigateTo(currentPage);
+    }
+);
+
+// ========================================
+// RIDER COMPLETED ORDER
+// ========================================
+
+socket.on(
+    "riderOrderCompleted",
+    async (data) => {
+
+        console.log(
+            "🏍️ RIDER ORDER COMPLETED:",
+            data
+        );
+
+        showDashboardNotification(
+            `${data.orderNumber} was completed by rider ${data.riderName}.`,
+            "Order Completed"
+        );
+
+        // Refresh dashboard data
+        await loadOrders();
+
+        navigateTo(currentPage);
+    }
+);
 
 function showDashboardNotification(message, title = "TOSO Dashboard") {
 
@@ -949,6 +1149,8 @@ socket.on("subscriberUpdated", async (data) => {
 
                let subscribersCache = [];
 
+               let ridersCache = [];
+
 async function loadOrders() {
     try {
         const response = await fetch(`${API_BASE}/orders`);
@@ -1056,6 +1258,124 @@ function getOrders() {
     return ordersCache;
 }
 
+async function loadRiders() {
+    try {
+        const response = await fetch(`${API_BASE}/riders`);
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(result.message || 'Failed to load riders.');
+        }
+
+        ridersCache = (result.data || []).map(rider => ({
+    id: rider._id,
+    name: rider.name,
+    password: rider.password || '',
+    image: rider.image || '',
+    available: rider.available !== false,
+    isOnline: rider.isOnline === true,
+    createdAt: rider.createdAt,
+    updatedAt: rider.updatedAt,
+    raw: rider
+}));
+
+        return ridersCache;
+    } catch (error) {
+        console.error('❌ Failed to load riders:', error);
+        alert(error.message || 'Could not load riders from the server.');
+        ridersCache = [];
+        return [];
+    }
+}
+
+function getRiders() {
+    return ridersCache;
+}
+function getRiderName(riderId) {
+    if (!riderId) return 'Unassigned';
+    const rider = getRiders().find(r => String(r.id) === String(riderId));
+    return rider ? rider.name : 'Unassigned';
+}
+window.openAssignRider = function(orderId) {
+    const onlineRiders = getRiders().filter(
+    r =>
+        r.available === true &&
+        r.isOnline === true
+);
+    if (onlineRiders.length === 0) {
+        alert('No online riders available.');
+        return;
+    }
+
+    const modal = document.getElementById('modalContent');
+    modal.innerHTML = `
+        <button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+        <h2>Assign Rider to Order ${orderId}</h2>
+        <div style="max-height:300px;overflow-y:auto;margin-top:10px;">
+            <table>
+                <thead>
+                    <tr><th>Image</th><th>Name</th><th>Status</th><th>Assign</th></tr>
+                </thead>
+                <tbody>
+                    ${onlineRiders.map(rider => `
+                        <tr>
+                            <td>
+                                <img src="${rider.image || 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=faces'}" alt="${rider.name}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;">
+                            </td>
+                            <td>${rider.name}</td>
+                            <td><span class="status-badge status-confirmed">Online</span></td>
+                            <td>
+                                <input type="radio" name="riderAssign" value="${rider.id}" style="width:18px;height:18px;cursor:pointer;">
+                            </td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary" id="assignRiderBtn" onclick="assignRiderToOrder('${orderId}')">Assign</button>
+        </div>
+    `;
+    document.getElementById('modalOverlay').classList.add('open');
+};
+
+window.assignRiderToOrder = async function(orderId) {
+    const selected = document.querySelector('input[name="riderAssign"]:checked');
+    if (!selected) {
+        alert('Please select a rider.');
+        return;
+    }
+    const riderId = selected.value;
+
+    const submitButton = document.getElementById('assignRiderBtn');
+    if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Assigning...`;
+    }
+
+    try {
+        const response = await fetch(`${API_BASE}/orders/${encodeURIComponent(orderId)}/assign-rider`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ riderId })
+        });
+        const data = await response.json();
+        if (!response.ok || !data.success) throw new Error(data.message || 'Failed to assign rider.');
+
+        await loadOrders();
+        closeModal();
+        navigateTo(currentPage);
+    } catch (error) {
+        console.error('❌ Error assigning rider:', error);
+        alert(error.message);
+        if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.innerHTML = 'Assign';
+        }
+    }
+};
+
 function normalizeOrder(order) {
     return {
         id: order.orderNumber,
@@ -1085,9 +1405,12 @@ function normalizeOrder(order) {
             order.address?.longitude ?? null,
 
         items:
-            Array.isArray(order.items)
-                ? order.items.map(item => item.name)
-                : [],
+    Array.isArray(order.items)
+        ? order.items.map(item => ({
+            name: item.name,
+            quantity: item.quantity
+        }))
+        : [],
 
         total:
             order.pricing?.total || 0,
@@ -1105,11 +1428,14 @@ function normalizeOrder(order) {
                     .split('T')[0]
                 : 'N/A',
 
+         notes: order.notes || '',
+
         createdAt: order.createdAt,
 
         updatedAt: order.updatedAt,
 
-        raw: order
+        raw: order,
+        riderId: order.riderId || order.rider?._id || null,
     };
 }
 
@@ -1257,7 +1583,7 @@ function getChefsSpecial() {
 
 }
 
-            const pages = ['dashboard', 'orders', 'completed', 'cancelled', 'analytics', 'menu', 'chefs-special', 'inquiries', 'subscribers'];
+            const pages = ['dashboard', 'orders', 'completed', 'cancelled', 'analytics', 'menu', 'chefs-special', 'inquiries', 'subscribers', 'riders'];
             let currentPage = 'dashboard';
             let chartInstances = {};
 
@@ -1270,8 +1596,8 @@ function getChefsSpecial() {
                 const activeLink = document.querySelector(`[data-page="${page}"]`);
                 if (activeLink) activeLink.classList.add('active');
                 let title = page.charAt(0).toUpperCase() + page.slice(1);
-if (page === 'completed') title = 'Completed Orders';
-else if (page === 'cancelled') title = 'Cancelled Orders';
+if (page === 'completed') title = 'Orders';
+else if (page === 'cancelled') title = 'Orders';
 document.getElementById('pageTitle').textContent = title;
                 renderPage(page);
                 document.getElementById('sidebar').classList.remove('open');
@@ -1290,6 +1616,7 @@ document.getElementById('pageTitle').textContent = title;
     case 'chefs-special': renderChefsSpecialPage(container); break;
     case 'inquiries': renderInquiries(container); break;
     case 'subscribers': renderSubscribers(container); break;
+    case 'riders': renderRiders(container); break;
 }
             }
 
@@ -1371,15 +1698,27 @@ if (filterType === 'completed') {
 }
                 const statuses = ['pending','confirmed','preparing','ready','out_for_delivery','completed'];
                 container.innerHTML = `
-                <div class="card">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
+        <h3>${filterType === 'active' ? 'Active Orders' : filterType === 'completed' ? 'Completed Orders' : 'Cancelled Orders'}</h3>
+        ${filterType === 'active' ? `
+          <button class="btn btn-danger-2" onclick="clearAllOrders()" title="Delete all orders from database">
+            <i class="fa-solid fa-trash"></i> Clear Orders
+          </button>
+        ` : ''}
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+    
                   
                   <div style="overflow-x:auto;margin-top:16px;">
                     <table>
                       <thead>
                         <tr>
                           <th>Order ID</th><th>Customer</th><th>Phone</th><th>Email</th>
-                          <th>Type</th><th>Address</th><th>Map</th><th>Items</th><th>Total</th>
-                          <th>Date</th><th>Status</th><th>Actions</th><th>State</th>
+                          <th>Type</th><th>Address</th><th>Map</th><th>Notes</th><th>Items</th><th>Total</th>
+                          <th>Date</th><th>Status</th><th class="actionhaedalign">Actions</th><th>State</th>
+                          <th>Rider</th><th>Assign</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -1396,18 +1735,26 @@ if (filterType === 'completed') {
                                 ? `<a href="https://www.google.com/maps?q=${o.latitude},${o.longitude}" target="_blank" class="map-link" title="Open location"><i class="fa-solid fa-map-location-dot"></i></a>`
                                 : '—'}
                             </td>
-                            <td>${o.items.join(', ')}</td>
+                            <td class="notes-cell">${o.notes || '—'}</td>
+                            <td>
+    ${o.items
+        .map(item => `${item.name} x${item.quantity}`)
+        .join(', ')
+    }
+</td>
                             <td>PKR ${o.total}</td>
                             <td>${o.date}</td>
                             <td><span class="status-badge status-${o.status}">${o.status}</span></td>
-                            <td>
+                           <td>
   <div class="actions">
-    ${filterType === 'cancelled' ? `
-      <button class="btn btn-sm btn-outline" onclick="viewOrder('${o.id}')" title="View order details"><i class="fa-solid fa-eye"></i></button>
-      ${statuses.map(s => `<button class="btn btn-xs status-action-btn" disabled style="opacity:0.5;cursor:not-allowed;">${s === 'out_for_delivery' ? 'Out' : s.charAt(0).toUpperCase()+s.slice(1)}</button>`).join('')}
-      <button class="btn btn-xs btn-danger" disabled style="opacity:0.5;cursor:not-allowed;"><i class="fa-solid fa-trash"></i></button>
+    ${(filterType === 'completed' || filterType === 'cancelled') ? `
+      <button class="btn btn-sm btn-outline" onclick="viewOrder('${o.id}')" title="View order details">
+        <i class="fa-solid fa-eye"></i>
+      </button>
     ` : `
-      <button class="btn btn-sm btn-outline" onclick="viewOrder('${o.id}')" title="View details"><i class="fa-solid fa-eye"></i></button>
+      <button class="btn btn-sm btn-outline" onclick="viewOrder('${o.id}')" title="View details">
+        <i class="fa-solid fa-eye"></i>
+      </button>
       ${statuses.map(s => `
         <button class="btn btn-xs status-action-btn" 
                 onclick="updateOrderStatus('${o.id}','${s}')" 
@@ -1416,24 +1763,32 @@ if (filterType === 'completed') {
           ${s === 'out_for_delivery' ? 'Out' : s.charAt(0).toUpperCase()+s.slice(1)}
         </button>
       `).join('')}
-     <button class="btn btn-xs btn-danger" 
+      <button class="btn btn-xs btn-danger" 
         ${filterType === 'completed' ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : `onclick="cancelOrder('${o.id}')"`}
         title="${filterType === 'completed' ? 'Completed orders cannot be cancelled' : 'Cancel order'}">
-    <i class="fa-solid fa-trash"></i>
-</button>
+        <i class="fa-solid fa-trash"></i>
+      </button>
     `}
   </div>
 </td>
                                  <td class="status-b">
                                   ${o.state || 'active'}
                                  </td>
+                                 <td>
+  ${getRiderName(o.riderId)}
+</td>
+<td>
+  ${(filterType !== 'completed' && filterType !== 'cancelled' && o.status !== 'completed' && o.status !== 'cancelled')
+    ? `<button class="btn btn-xs btn-primary" onclick="openAssignRider('${o.id}')" title="Assign rider">Add</button>`
+    : `<button class="btn btn-xs btn-primary" disabled style="opacity:0.5;cursor:not-allowed;" title="Cannot assign">Add</button>`}
+</td>
                           </tr>
                         `).join('')}
                       </tbody>
                     </table>
                   ${orders.length === 0 ? `
   <tr>
-    <td colspan="13" style="text-align:center;padding:40px;">
+    <td colspan="15" style="text-align:center;padding:40px;">
       <div class="empty-state">
         <i class="fa-solid fa-inbox"></i>
         <p>${
@@ -1636,6 +1991,203 @@ window.deleteSubscriber = async function(subscriberId) {
 };
 
 
+function renderRiders(container) {
+    const riders = getRiders();
+    container.innerHTML = `
+        <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+                <h3>Delivery Riders</h3>
+                <button class="btn btn-primary" onclick="openAddRider()">
+                    <i class="fa-solid fa-plus"></i> Add Rider
+                </button>
+            </div>
+            <div style="overflow-x:auto;margin-top:16px;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Password</th>
+                            <th>Availability</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="rider-body">
+                        ${riders.map(rider => `
+                            <tr>
+                                <td>
+                                    <img src="${rider.image || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQp9e1gRJbgnSc_VRlUx__FD-v0E3cXSPL5HBw54NzoAg&s=10'}" alt="${rider.name}" style="width:50px;height:50px;object-fit:cover;border-radius:50%;">
+                                </td>
+                                <td>${rider.name}</td>
+                                <td>
+                                    <span id="rider-pass-${rider.id}" style="font-family:monospace;">••••••••</span>
+                                    
+                                </td>
+                                <td>
+                                    ${rider.available 
+                                        ? `<span class="status-badge status-confirmed">Available</span>` 
+                                        : `<span class="status-badge status-cancelled">Unavailable</span>`}
+                                </td>
+                                <td>
+                                    <div class="actions">
+                                        <button class="btn btn-sm btn-outline" onclick="editRider('${rider.id}')" title="Edit rider">
+                                            <i class="fa-solid fa-pen"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger" onclick="deleteRider('${rider.id}')" title="Delete rider">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+                ${riders.length === 0 ? '<div class="empty-state"><i class="fa-solid fa-motorcycle"></i><p>No riders yet.</p></div>' : ''}
+            </div>
+        </div>
+    `;
+}
+
+window.toggleRiderPassword = function(riderId, actualPassword) {
+    const span = document.getElementById(`rider-pass-${riderId}`);
+    if (!span) return;
+    if (span.textContent === '••••••••') {
+        span.textContent = actualPassword || '—';
+    } else {
+        span.textContent = '••••••••';
+    }
+};
+
+window.openAddRider = function() {
+    const modal = document.getElementById('modalContent');
+    modal.innerHTML = `
+        <button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+        <h2>Add Rider</h2>
+        <form id="riderForm">
+            <div class="form-group"><label>Name *</label><input type="text" id="riderName" maxlength="100" required></div>
+            <div class="form-group"><label>Password *</label><input type="text" id="riderPassword" maxlength="100" required></div>
+            <div class="form-group"><label>Image URL</label><input type="url" id="riderImage" placeholder="https://..."></div>
+            <div class="form-group">
+                <label style="display:flex;align-items:center;gap:8px;">
+                    <input type="checkbox" id="riderAvailable" checked> Available
+                </label>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
+                <button type="submit" class="btn btn-primary" id="addRiderSubmitBtn">Add Rider</button>
+            </div>
+        </form>
+    `;
+    document.getElementById('modalOverlay').classList.add('open');
+   document.getElementById('riderForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const name = document.getElementById('riderName').value.trim();
+    const password = document.getElementById('riderPassword').value.trim();
+    const image = document.getElementById('riderImage').value.trim() || '';
+    const available = document.getElementById('riderAvailable').checked;
+
+    if (!name || !password) return alert('Name and password are required.');
+
+    const submitButton = document.getElementById('addRiderSubmitBtn');
+    submitButton.disabled = true;
+    submitButton.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Adding...`;
+
+    try {
+        const response = await fetch(`${API_BASE}/riders`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, password, image, available })
+        });
+        const data = await response.json();
+        if (!response.ok || !data.success) throw new Error(data.message || 'Failed to add rider.');
+
+        await loadRiders();
+        closeModal();
+        navigateTo('riders');
+    } catch (error) {
+        console.error('❌ Error adding rider:', error);
+        alert(error.message);
+        submitButton.disabled = false;
+        submitButton.innerHTML = 'Add Rider';
+    }
+});
+};
+
+window.editRider = function(id) {
+    const riders = getRiders();
+    const rider = riders.find(r => String(r.id) === String(id));
+    if (!rider) return alert('Rider not found.');
+    const modal = document.getElementById('modalContent');
+    modal.innerHTML = `
+        <button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+        <h2>Edit Rider</h2>
+        <form id="editRiderForm">
+            <div class="form-group"><label>Name *</label><input type="text" id="editRiderName" value="${rider.name}" maxlength="100" required></div>
+            <div class="form-group"><label>Password *</label><input type="text" id="editRiderPassword" value="${rider.password}" maxlength="100" required></div>
+            <div class="form-group"><label>Image URL</label><input type="url" id="editRiderImage" value="${rider.image}"></div>
+            <div class="form-group">
+                <label style="display:flex;align-items:center;gap:8px;">
+                    <input type="checkbox" id="editRiderAvailable" ${rider.available !== false ? 'checked' : ''}> Available
+                </label>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
+                <button type="submit" class="btn btn-primary" id="editRiderSubmitBtn">Save Changes</button>
+            </div>
+        </form>
+    `;
+    document.getElementById('modalOverlay').classList.add('open');
+document.getElementById('editRiderForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const name = document.getElementById('editRiderName').value.trim();
+    const password = document.getElementById('editRiderPassword').value.trim();
+    const image = document.getElementById('editRiderImage').value.trim();
+    const available = document.getElementById('editRiderAvailable').checked;
+
+    if (!name || !password) return alert('Name and password are required.');
+
+    const submitButton = document.getElementById('editRiderSubmitBtn');
+    submitButton.disabled = true;
+    submitButton.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Saving...`;
+
+    try {
+        const response = await fetch(`${API_BASE}/riders/${encodeURIComponent(rider.id)}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, password, image, available })
+        });
+        const data = await response.json();
+        if (!response.ok || !data.success) throw new Error(data.message || 'Failed to update rider.');
+
+        await loadRiders();
+        closeModal();
+        navigateTo('riders');
+    } catch (error) {
+        console.error('❌ Error updating rider:', error);
+        alert(error.message);
+        submitButton.disabled = false;
+        submitButton.innerHTML = 'Save Changes';
+    }
+});
+};
+
+window.deleteRider = async function(id) {
+    if (!confirm('Delete this rider?')) return;
+    try {
+        const response = await fetch(`${API_BASE}/riders/${encodeURIComponent(id)}`, { method: 'DELETE' });
+        const data = await response.json();
+        if (!response.ok || !data.success) throw new Error(data.message || 'Failed to delete rider.');
+        await loadRiders();
+        navigateTo('riders');
+    } catch (error) {
+        console.error('❌ Error deleting rider:', error);
+        alert(error.message);
+    }
+};
+
+
 
             window.viewOrder = function(orderId) {
                 const orders = getOrders();
@@ -1651,7 +2203,8 @@ window.deleteSubscriber = async function(subscriberId) {
                   <p><strong>Order Type:</strong> ${order.orderType || 'N/A'}</p>
                   <p><strong>Delivery Address:</strong> ${order.deliveryAddress || 'N/A'}</p>
                   ${order.latitude && order.longitude ? `<p><strong>Map:</strong> <a href="https://www.google.com/maps?q=${order.latitude},${order.longitude}" target="_blank">Open in Google Maps</a></p>` : ''}
-                  <p><strong>Items:</strong> ${order.items.join(', ')}</p>
+                  <p><strong>Items:</strong> ${order.items.map(item => `${item.name} x${item.quantity}`).join(', ')}</p>
+                  <p><strong>Notes:</strong> ${order.notes || 'N/A'}</p>
                   <p><strong>Total:</strong> PKR ${order.total}</p>
                   <p><strong>Date:</strong> ${order.date}</p>
                   <p><strong>Status:</strong> <span class="status-badge status-${order.status}">${order.status}</span></p>
@@ -1666,6 +2219,32 @@ window.showCancelledAlert = function() {
     alert('Cancelled orders cannot have their status changed.');
 };
 
+window.clearAllOrders = async function() {
+    if (!confirm('⚠️ Are you sure you want to DELETE ALL ORDERS? This cannot be undone.')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_BASE}/orders`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(result.message || 'Failed to delete orders.');
+        }
+
+        console.log('✅ All orders deleted:', result);
+        showDashboardNotification('All orders have been cleared.', 'Orders Cleared');
+        await loadOrders();
+        navigateTo('orders');  // refresh the current Active Orders page
+    } catch (error) {
+        console.error('❌ Error clearing orders:', error);
+        alert(error.message || 'Failed to clear orders.');
+    }
+};
 
                window.updateOrderStatus = async function(orderId, newStatus) {
 
@@ -1793,68 +2372,171 @@ window.showCancelledAlert = function() {
 };
 
 
-            function renderAnalytics(container) {
-                container.innerHTML = `
-                <div class="charts-grid">
-                  <div class="chart-card"><h3>Revenue Trend</h3><div class="chart-container"><canvas id="revenueChart"></canvas></div></div>
-                  <div class="chart-card"><h3>Order Status Breakdown</h3><div class="chart-container"><canvas id="statusChart"></canvas></div></div>
-                  <div class="chart-card"><h3>Popular Items</h3><div class="chart-container"><canvas id="itemsChart"></canvas></div></div>
-                  <div class="chart-card"><h3>Order Types</h3><div class="chart-container"><canvas id="orderTypeChart"></canvas></div></div>
-                </div>
-              `;
+function getLocalDateString(date) {
+    const d = new Date(date);
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+}
 
-                const orders = getOrders();
-                const last7Days = [];
-                for (let i = 6; i >= 0; i--) {
-                    const d = new Date();
-                    d.setDate(d.getDate() - i);
-                    last7Days.push(d.toISOString().split('T')[0]);
-                }
-                const revenueByDate = {};
-                last7Days.forEach(date => revenueByDate[date] = 0);
-                orders.filter(o => o.status !== 'cancelled').forEach(o => {
-                    if (revenueByDate.hasOwnProperty(o.date)) revenueByDate[o.date] += o.total;
-                });
+function isOrderCancelled(o) {
+    return o.status === 'cancelled' || o.state === 'cancelled';
+}
 
-                const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-                chartInstances.revenue = new Chart(revenueCtx, {
-                    type: 'line',
-                    data: {
-                        labels: last7Days,
-                        datasets: [{ label: 'Revenue (PKR)', data: last7Days.map(d => revenueByDate[d]), borderColor: '#6737C7', backgroundColor: 'rgba(103,55,199,0.1)', tension: 0.3, fill: true, pointBackgroundColor: '#F34B9B' }]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false }
-                });
 
-                const statusCounts = { pending: 0, completed: 0, cancelled: 0 };
-                orders.forEach(o => statusCounts[o.status]++);
-                const statusCtx = document.getElementById('statusChart').getContext('2d');
-                chartInstances.status = new Chart(statusCtx, {
-                    type: 'doughnut',
-                    data: { labels: ['Pending', 'Completed', 'Cancelled'], datasets: [{ data: [statusCounts.pending, statusCounts.completed, statusCounts.cancelled], backgroundColor: ['#FFAA22', '#C9F227', '#FF665F'] }] },
-                    options: { responsive: true, maintainAspectRatio: false }
-                });
+           function renderAnalytics(container) {
+    container.innerHTML = `
+        <div class="charts-grid">
+            <div class="chart-card"><h3>Revenue Trend</h3><div class="chart-container"><canvas id="revenueChart"></canvas></div></div>
+            <div class="chart-card"><h3>Order Status Breakdown</h3><div class="chart-container"><canvas id="statusChart"></canvas></div></div>
+            <div class="chart-card"><h3>Popular Items</h3><div class="chart-container"><canvas id="itemsChart"></canvas></div></div>
+            <div class="chart-card"><h3>Order Types</h3><div class="chart-container"><canvas id="orderTypeChart"></canvas></div></div>
+        </div>
+    `;
 
-                const itemCounts = {};
-                orders.forEach(o => o.items.forEach(item => itemCounts[item] = (itemCounts[item]||0)+1));
-                const sortedItems = Object.entries(itemCounts).sort((a,b) => b[1]-a[1]).slice(0,6);
-                const itemsCtx = document.getElementById('itemsChart').getContext('2d');
-                chartInstances.items = new Chart(itemsCtx, {
-                    type: 'bar',
-                    data: { labels: sortedItems.map(i => i[0]), datasets: [{ label: 'Orders', data: sortedItems.map(i => i[1]), backgroundColor: '#A98BE8', borderRadius: 8 }] },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-                });
+    const orders = getOrders();
 
-                const typeCounts = {};
-                orders.forEach(o => { if(o.orderType) typeCounts[o.orderType] = (typeCounts[o.orderType]||0)+1; });
-                const typeCtx = document.getElementById('orderTypeChart').getContext('2d');
-                chartInstances.type = new Chart(typeCtx, {
-                    type: 'pie',
-                    data: { labels: Object.keys(typeCounts), datasets: [{ data: Object.values(typeCounts), backgroundColor: ['#F34B9B', '#48B9E8', '#6737C7', '#FFAA22'] }] },
-                    options: { responsive: true, maintainAspectRatio: false }
-                });
-            }
+    // ========================================
+    // 1. EXCLUDE CANCELLED ORDERS (both state & status)
+    // ========================================
+    const activeOrders = orders.filter(o => !isOrderCancelled(o));
 
+   // ========================================
+// 2. REVENUE TREND (completed orders only, local date, last 7 days)
+// ========================================
+const completedOrders = orders.filter(o => o.status === 'completed');
+
+const last7Days = [];
+for (let i = 6; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    last7Days.push(getLocalDateString(d));
+}
+
+const revenueByDate = {};
+last7Days.forEach(date => revenueByDate[date] = 0);
+
+completedOrders.forEach(o => {
+    const localDate = o.createdAt ? getLocalDateString(o.createdAt) : null;
+    if (localDate && revenueByDate.hasOwnProperty(localDate)) {
+        revenueByDate[localDate] += o.total;
+    }
+});
+
+    const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+    chartInstances.revenue = new Chart(revenueCtx, {
+        type: 'line',
+        data: {
+            labels: last7Days,
+            datasets: [{
+                label: 'Revenue (PKR)',
+                data: last7Days.map(d => revenueByDate[d]),
+                borderColor: '#6737C7',
+                backgroundColor: 'rgba(103,55,199,0.1)',
+                tension: 0.3,
+                fill: true,
+                pointBackgroundColor: '#F34B9B',
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    // ========================================
+    // 3. ORDER STATUS BREAKDOWN (exclude cancelled)
+    // ========================================
+       // ========================================
+    // 3. ORDER STATUS BREAKDOWN (INCLUDING CANCELLED)
+    // ========================================
+    const statusCounts = {};
+
+    // Use ALL orders (not activeOrders) to include cancelled
+    orders.forEach(o => {
+        // Combine both state and status cancellations into "cancelled"
+        let key = o.status || 'pending';
+        if (o.state === 'cancelled' || o.status === 'cancelled') {
+            key = 'cancelled';
+        }
+        statusCounts[key] = (statusCounts[key] || 0) + 1;
+    });
+
+    // Maintain a consistent order and color mapping
+    const statusOrder = ['pending', 'confirmed', 'preparing', 'ready', 'out_for_delivery', 'completed', 'cancelled'];
+    const statusColors = {
+        pending: '#FFAA22',
+        confirmed: '#C9F227',
+        preparing: '#48B9E8',
+        ready: '#F34B9B',
+        out_for_delivery: '#A98BE8',
+        completed: '#2e7d32',
+        cancelled: '#FF665F' // coral red
+    };
+
+    const labels = statusOrder.filter(s => statusCounts[s] > 0);
+    const values = labels.map(s => statusCounts[s]);
+    const colors = labels.map(s => statusColors[s] || '#888');
+
+    const statusCtx = document.getElementById('statusChart').getContext('2d');
+    chartInstances.status = new Chart(statusCtx, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: values,
+                backgroundColor: colors
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    // ========================================
+    // 4. POPULAR ITEMS (exclude cancelled)
+    // ========================================
+    const itemCounts = {};
+    activeOrders.forEach(o => {
+        if (Array.isArray(o.items)) {
+            o.items.forEach(item => {
+                const name = typeof item === 'string' ? item : item.name;
+                itemCounts[name] = (itemCounts[name] || 0) + 1;
+            });
+        }
+    });
+    const sortedItems = Object.entries(itemCounts).sort((a,b) => b[1]-a[1]).slice(0,6);
+    const itemsCtx = document.getElementById('itemsChart').getContext('2d');
+    chartInstances.items = new Chart(itemsCtx, {
+        type: 'bar',
+        data: {
+            labels: sortedItems.map(i => i[0]),
+            datasets: [{
+                label: 'Orders',
+                data: sortedItems.map(i => i[1]),
+                backgroundColor: '#A98BE8',
+                borderRadius: 8,
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+    });
+
+    // ========================================
+    // 5. ORDER TYPES (exclude cancelled)
+    // ========================================
+    const typeCounts = {};
+    activeOrders.forEach(o => {
+        if (o.orderType) typeCounts[o.orderType] = (typeCounts[o.orderType] || 0) + 1;
+    });
+    const typeCtx = document.getElementById('orderTypeChart').getContext('2d');
+    chartInstances.type = new Chart(typeCtx, {
+        type: 'pie',
+        data: {
+            labels: Object.keys(typeCounts),
+            datasets: [{
+                data: Object.values(typeCounts),
+                backgroundColor: ['#F34B9B', '#48B9E8', '#6737C7', '#FFAA22']
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+}
             function renderMenuPage(container) {
                 const menu = getMenu();
                 container.innerHTML = `
@@ -1912,7 +2594,7 @@ window.showCancelledAlert = function() {
                 gap:12px;
             ">
 
-                <h3>Chef's Special</h3>
+                <h3>Chef's Choice</h3>
 
                 <button
                     class="btn btn-primary"
@@ -3854,7 +4536,8 @@ Promise.all([
     loadMenu(),
     loadChefsSpecial(),
     loadInquiries(),
-    loadSubscribers()
+    loadSubscribers(),
+    loadRiders()
 ]).then(() => {
     navigateTo('dashboard');
 });

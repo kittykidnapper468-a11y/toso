@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOSO Rider Portal</title>
+    <meta name="description" content="TOSO rider portal — view and complete assigned orders.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --deep-purple: #28134F;
+            --vibrant-purple: #6737C7;
+            --lavender: #A98BE8;
+            --hot-pink: #F34B9B;
+            --coral: #FF665F;
+            --bright-orange: #FFAA22;
+            --lime: #C9F227;
+            --sky-blue: #48B9E8;
+            --off-white: #FFFDF8;
+            --dark-text: #171329;
+            --white: #FFFFFF;
+            --soft-shadow: 0 8px 32px rgba(23, 19, 41, 0.08);
+            --card-shadow: 0 4px 20px rgba(23, 19, 41, 0.06);
+            --font-heading: 'Fredoka', 'Baloo 2', sans-serif;
+            --font-body: 'Nunito', 'DM Sans', sans-serif;
+            --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --radius-sm: 12px;
+            --radius-md: 20px;
+            --radius-lg: 24px;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: var(--font-body);
+            background: #f5f3fa;
+            color: var(--dark-text);
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+        h1, h2, h3, h4 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        a { text-decoration: none; color: inherit; }
+        button { cursor: pointer; font-family: var(--font-body); border: none; transition: all var(--transition-smooth); }
+        img { max-width: 100%; display: block; }
+
+        /* Top Header */
+        .top-header {
+            background: var(--deep-purple);
+            color: #fff;
+            padding: 20px 24px;
+            text-align: left;
+        }
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            display: inline-block;
+        }
+        .logo .dot {
+            width: 10px;
+            height: 10px;
+            background: var(--lime);
+            border-radius: 50%;
+            margin-left: 2px;
+            animation: pulse 2s infinite;
+            display: inline-block;
+            position: relative;
+            top: -6px;
+        }
+        @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.4)} }
+
+        /* Main container */
+        .main {
+            padding: 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .top-bar {
+            display: flex; align-items: center;
+            margin-bottom: 32px; flex-wrap: wrap; gap: 16px;
+        }
+        .top-bar h1 { font-size: 1.8rem; color: var(--deep-purple); }
+        .card {
+            background: #fff; border-radius: var(--radius-lg);
+            padding: 24px; box-shadow: var(--card-shadow);
+            margin-bottom: 24px;
+        }
+        .card-title {
+            font-size: 1.5rem;
+            color: var(--deep-purple);
+            margin-bottom: 16px;
+        }
+/* ──────────── MODAL ──────────── */
+ .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+        }
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            max-width: 520px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: scroll;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            animation: popIn 0.3s ease;
+        }
+        .modal::-webkit-scrollbar{
+            display: none;
+        }
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .modal h2 {
+            font-size: 1.5rem;
+            color: var(--deep-purple);
+            margin-bottom: 20px;
+        }
+.modal p {
+    margin-bottom: 12px;
+}
+.modal-close {
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    color: #999;
+    cursor: pointer;
+}
+        /* Table */
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 14px 16px; text-align: left; border-bottom: 1px solid #f0edf5; font-size: 0.9rem; vertical-align: middle; }
+        th { color: #888; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; background: #faf9fc; position: sticky; top: 0; }
+        tbody tr:hover { background: #fcfaff; }
+        tbody tr:nth-child(even) { background: #fdfcff; }
+        tbody tr:nth-child(even):hover { background: #f8f5ff; }
+        .status-badge {
+            padding: 6px 14px; border-radius: 50px; font-weight: 700;
+            font-size: 0.75rem; display: inline-block;
+            font-family: var(--font-heading); text-transform: capitalize;
+        }
+        .status-pending { background:#fff3e0; color:#c77700; }
+        .status-confirmed { background:#e8f5e9; color:#2e7d32; }
+        .status-preparing { background:#e3f2fd; color:#1565c0; }
+        .status-ready { background:#fff8e1; color:#f57f17; }
+        .status-out_for_delivery { background:#f3e5f5; color:#6a1b9a; }
+        .status-completed { background:#e8f5e9; color:#2e7d32; }
+        .status-cancelled { background:#ffeaea; color:#c62828; }
+        .btn {
+            padding: 10px 20px; border-radius: 50px; font-weight: 700;
+            font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px;
+            transition: all var(--transition-smooth); border: none;
+        }
+        .btn-lime { background: var(--lime); color: var(--deep-purple); }
+        .btn-lime:hover { background: #ddf030; box-shadow: 0 6px 18px rgba(201,242,39,0.4); }
+        .btn-sm { padding: 6px 12px; font-size: 0.8rem; }
+        .address-cell { min-width: 220px; max-width: 320px; word-break: break-word; white-space: normal; }
+        .map-link {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 36px; height: 36px; border-radius: 50%;
+            background: #f0edf5; color: var(--vibrant-purple); transition: all 0.2s;
+        }
+        .map-link:hover { background: var(--vibrant-purple); color: #fff; transform: scale(1.1); }
+        .empty-state { text-align: center; padding: 40px; color: #aaa; }
+        .empty-state i { font-size: 2.5rem; margin-bottom: 12px; }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .main { padding: 16px; }
+            th, td { padding: 10px 8px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Header with TOSO Logo only -->
+    <header class="top-header">
+        <div class="logo">TOSO<span class="dot"></span></div>
+    </header>
+
+    <!-- Main content -->
+    <main class="main">
+        <div class="top-bar" >
+            <img
+    id="riderImage"
+    src=""
+    alt="Rider profile"
+    style="
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        object-fit: cover;
+        display: none;
+    "
+>
+            <div>
+                <h1>Rider Portal</h1>
+                <p>Welcome, <span id="riderName">Rider</span></p>
+            </div>
+        </div>
+        <div class="card">
+            <h3 class="card-title">Your Assigned Orders</h3>
+            <div style="overflow-x:auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th><th>Customer</th><th>Phone</th><th>Email</th>
+                            <th>Type</th><th>Address</th><th>Map</th><th>Notes</th><th>Items</th><th>Total</th>
+                            <th>Date</th><th>Status</th><th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersBody"></tbody>
+                </table>
+                <div id="emptyState" class="empty-state" style="display:none;">
+                    <i class="fa-solid fa-inbox"></i><p>No orders assigned to you.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+<!-- Modal for viewing order details -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modalContent"></div>
+</div>
+    <div id="toastContainer" style="position:fixed;bottom:24px;right:24px;z-index:9999;"></div>
+<script src="http://localhost:5000/socket.io/socket.io.js"></script>
+    <script>
+        const API_BASE = 'http://localhost:5000/api';
+      
+
+        const SOCKET_BASE =
+    API_BASE.replace("/api", "");
+
+const riderToken =
+    sessionStorage.getItem(
+        "tosoRiderToken"
+    );
+
+const socket =
+    io(SOCKET_BASE, {
+        auth: {
+            token: riderToken
+        }
+    });
+
+    socket.on("connect", () => {
+
+    console.log(
+        "🟢 Rider socket connected:",
+        socket.id
+    );
+
+});
+
+socket.on("disconnect", () => {
+
+    console.log(
+        "🔴 Rider socket disconnected"
+    );
+
+});
+
+socket.on("orderAssigned", async (data) => {
+
+    console.log(
+        "🏍️ New order assigned:",
+        data
+    );
+
+    await loadAssignedOrders();
+
+});
+
+        async function loadRiderProfile() {
+
+    const token =
+        sessionStorage.getItem("tosoRiderToken");
+
+    if (!token) {
+        window.location.replace("riderlogin.html");
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            `${API_BASE}/riders/me`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(
+                result.message || "Failed to load rider profile."
+            );
+        }
+
+        const rider = result.data;
+
+        // ========================================
+        // RIDER NAME
+        // ========================================
+
+        const nameElement =
+            document.getElementById("riderName");
+
+        if (nameElement) {
+            nameElement.textContent =
+                rider.name || "Rider";
+        }
+
+        // ========================================
+        // RIDER IMAGE
+        // ========================================
+
+        const imageElement =
+            document.getElementById("riderImage");
+
+        if (imageElement) {
+
+            if (rider.image) {
+
+                imageElement.src = rider.image;
+                imageElement.alt =
+                    `${rider.name} profile photo`;
+
+                imageElement.style.display = "block";
+
+            } else {
+
+                // No image in database
+                imageElement.style.display = "none";
+            }
+        }
+
+        // Keep the current session data updated
+        sessionStorage.setItem(
+            "tosoRider",
+            JSON.stringify(rider)
+        );
+
+        console.log(
+            "✅ Rider profile loaded:",
+            rider
+        );
+
+    } catch (error) {
+
+        console.error(
+            "❌ Failed to load rider profile:",
+            error
+        );
+
+        sessionStorage.removeItem("tosoRiderToken");
+        sessionStorage.removeItem("tosoRider");
+
+        window.location.replace("riderlogin.html");
+    }
+}
+
+loadRiderProfile();
+
+        async function protectRiderPortal() {
+
+    const token =
+        sessionStorage.getItem("tosoRiderToken");
+
+    if (!token) {
+        window.location.replace(
+            "riderlogin.html"
+        );
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            `${API_BASE}/riders/me`,
+            {
+                headers: {
+                    Authorization:
+                        `Bearer ${token}`
+                }
+            }
+        );
+
+        const result =
+            await response.json();
+
+        if (
+            !response.ok ||
+            !result.success
+        ) {
+
+            sessionStorage.removeItem(
+                "tosoRiderToken"
+            );
+
+            sessionStorage.removeItem(
+                "tosoRider"
+            );
+
+            window.location.replace(
+                "riderlogin.html"
+            );
+
+            return;
+        }
+
+        // Valid rider session
+        console.log(
+            "✅ Rider authenticated:",
+            result.data.name
+        );
+
+    } catch (error) {
+
+        console.error(
+            "❌ Rider authentication check failed:",
+            error
+        );
+
+        window.location.replace(
+            "riderlogin.html"
+        );
+    }
+}
+
+protectRiderPortal();
+
+        let ordersCache = [];
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                background:#fff;padding:14px 20px;border-radius:12px;
+                box-shadow:0 8px 28px rgba(0,0,0,0.15);display:flex;
+                align-items:center;gap:10px;font-weight:600;
+                border-left:4px solid ${type === 'success' ? '#2d8a2d' : '#c62828'};
+                margin-bottom:10px;animation: slideIn 0.3s ease;
+            `;
+            toast.innerHTML = `<i class="fa-solid ${type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation'}" style="color:${type === 'success' ? '#2d8a2d' : '#c62828'}"></i> ${message}`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        window.closeModal = function() {
+    document.getElementById('modalOverlay').classList.remove('open');
+};
+
+document.getElementById('modalOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+});
+
+window.viewOrder = function(orderId) {
+    const order = ordersCache.find(o => o.id === orderId);
+    if (!order) return;
+
+    const modal = document.getElementById('modalContent');
+    modal.innerHTML = `
+        <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+        <h2>Order ${order.id}</h2>
+        <p><strong>Customer:</strong> ${order.customer}</p>
+        <p><strong>Phone:</strong> ${order.phone || 'N/A'}</p>
+        <p><strong>Email:</strong> ${order.email || 'N/A'}</p>
+        <p><strong>Order Type:</strong> ${order.orderType || 'N/A'}</p>
+        <p><strong>Delivery Address:</strong> ${order.deliveryAddress || 'N/A'}</p>
+        ${order.latitude && order.longitude ? `<p><strong>Map:</strong> <a href="https://www.google.com/maps?q=${order.latitude},${order.longitude}" target="_blank">Open in Google Maps</a></p>` : ''}
+        <p><strong>Items:</strong> ${order.items.join(', ')}</p>
+        <p><strong>Notes:</strong> ${order.notes || 'N/A'}</p>
+        <p><strong>Total:</strong> PKR ${order.total}</p>
+        <p><strong>Date:</strong> ${order.date}</p>
+        <p><strong>Status:</strong> <span class="status-badge status-${order.status}">${order.status}</span></p>
+        <div style="text-align:right;margin-top:20px;">
+            <button class="btn btn-outline" onclick="closeModal()">Close</button>
+        </div>
+    `;
+    document.getElementById('modalOverlay').classList.add('open');
+};
+
+        async function loadAssignedOrders() {
+
+    const token =
+        sessionStorage.getItem("tosoRiderToken");
+
+    if (!token) {
+
+        window.location.replace(
+            "riderlogin.html"
+        );
+
+        return;
+    }
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_BASE}/riders/my-orders`,
+                {
+                    headers: {
+                        Authorization:
+                            `Bearer ${token}`
+                    }
+                }
+            );
+
+        const result =
+            await response.json();
+
+        if (
+            !response.ok ||
+            !result.success
+        ) {
+
+            throw new Error(
+                result.message ||
+                "Failed to load assigned orders."
+            );
+        }
+
+        // ========================================
+        // SAVE REAL ORDERS INTO CACHE
+        // ========================================
+
+        ordersCache =
+            (result.data || []).map(
+                normalizeOrder
+            );
+
+        // ========================================
+        // RENDER THEM
+        // ========================================
+
+        renderAssignedOrders();
+
+    } catch (error) {
+
+        console.error(
+            "❌ Failed to load rider orders:",
+            error
+        );
+
+        showToast(
+            error.message ||
+            "Could not load assigned orders.",
+            "error"
+        );
+    }
+}
+
+        function normalizeOrder(order) {
+            return {
+                id: order.orderNumber,
+                customer: order.customer?.name || 'Unknown',
+                phone: order.customer?.phone || '',
+                email: order.customer?.email || '',
+                orderType: order.orderType === 'dine_in' ? 'Dine In' : order.orderType === 'takeaway' ? 'Takeaway' : order.orderType === 'delivery' ? 'Delivery' : order.orderType || 'N/A',
+                deliveryAddress: order.address?.text || '',
+                latitude: order.address?.latitude ?? null,
+                longitude: order.address?.longitude ?? null,
+                items: Array.isArray(order.items) ? order.items.map(item => `${item.name} x${item.quantity}`) : [],
+                total: order.pricing?.total || 0,
+                status: order.status || 'pending',
+                state: order.state ?? null,
+                date: order.createdAt ? new Date(order.createdAt).toISOString().split('T')[0] : 'N/A',
+                notes: order.notes || '',
+                riderId: order.riderId || null,
+            };
+        }
+
+        function renderAssignedOrders() {
+
+    const tbody =
+        document.getElementById("ordersBody");
+
+    const empty =
+        document.getElementById("emptyState");
+
+    if (!tbody || !empty) {
+        return;
+    }
+
+    if (ordersCache.length === 0) {
+
+        tbody.innerHTML = "";
+
+        empty.style.display = "block";
+
+        return;
+    }
+
+    empty.style.display = "none";
+
+    tbody.innerHTML = ordersCache
+        .map(o => `
+
+            <tr>
+
+                <td>
+                    <strong>${o.id}</strong>
+                </td>
+
+                <td>
+                    ${o.customer}
+                </td>
+
+                <td>
+                    ${o.phone || "—"}
+                </td>
+
+                <td>
+                    ${o.email || "—"}
+                </td>
+
+                <td>
+                    ${o.orderType || "—"}
+                </td>
+
+                <td class="address-cell">
+                    ${o.deliveryAddress || "—"}
+                </td>
+
+                <td>
+
+                    ${
+                        o.latitude !== null &&
+                        o.longitude !== null
+
+                        ? `
+                            <a
+                                href="https://www.google.com/maps?q=${o.latitude},${o.longitude}"
+                                target="_blank"
+                                class="map-link"
+                                title="Open location"
+                            >
+                                <i class="fa-solid fa-map-location-dot"></i>
+                            </a>
+                        `
+
+                        : "—"
+                    }
+
+                </td>
+
+<td>${o.notes || '—'}</td>
+
+                <td>
+                    ${o.items.join(", ")}
+                </td>
+
+                <td>
+                    PKR ${Number(
+                        o.total
+                    ).toLocaleString()}
+                </td>
+
+                <td>
+                    ${o.date}
+                </td>
+
+                <td>
+                    <span
+                        class="status-badge status-${o.status}"
+                    >
+                        ${o.status}
+                    </span>
+                </td>
+
+                <td>
+  <div class="actions" style="display:flex; gap:8px; align-items:center;">
+
+                    <button class="btn btn-sm btn-outline" onclick="viewOrder('${o.id}')" title="View order">
+            <i class="fa-solid fa-eye"></i>
+        </button>
+
+                    <button
+                        class="btn btn-lime btn-sm"
+                        ${
+                            o.status === "completed" ||
+                            o.status === "cancelled"
+
+                            ? `disabled style="opacity:0.5;cursor:not-allowed;"`
+
+                            : `onclick="completeOrder('${o.id}')"`
+                        }
+                    >
+                        <i class="fa-solid fa-check"></i>
+                        Completed
+                    </button>
+</div>
+                </td>
+
+            </tr>
+
+        `)
+        .join("");
+}
+
+        async function completeOrder(orderId) {
+            if (!confirm(`Mark order ${orderId} as completed?`)) return;
+            try {
+                const response = await fetch(`${API_BASE}/orders/${encodeURIComponent(orderId)}/status`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: 'completed' })
+                });
+                const data = await response.json();
+                if (!response.ok || !data.success) throw new Error(data.message || 'Failed to complete order.');
+                showToast('Order marked as completed.', 'success');
+                await loadAssignedOrders();
+            } catch (error) {
+                console.error('❌ Error:', error);
+                showToast(error.message, 'error');
+            }
+        }
+
+        // Load orders on start
+        loadAssignedOrders();
+    </script>
+</body>
+</html>

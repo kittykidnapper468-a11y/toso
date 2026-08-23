@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOSO Login — Good Food. Big Access.</title>
+    <meta name="description" content="Log in to TOSO dashboard to manage your restaurant.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --deep-purple: #28134F;
+            --vibrant-purple: #6737C7;
+            --lavender: #A98BE8;
+            --hot-pink: #F34B9B;
+            --coral: #FF665F;
+            --bright-orange: #FFAA22;
+            --lime: #C9F227;
+            --sky-blue: #48B9E8;
+            --off-white: #FFFDF8;
+            --dark-text: #171329;
+            --white: #FFFFFF;
+            --soft-shadow: 0 8px 32px rgba(23, 19, 41, 0.08);
+            --card-shadow: 0 4px 20px rgba(23, 19, 41, 0.06);
+            --font-heading: 'Fredoka', 'Baloo 2', sans-serif;
+            --font-body: 'Nunito', 'DM Sans', sans-serif;
+            --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --radius-sm: 12px;
+            --radius-md: 20px;
+            --radius-lg: 32px;
+            --radius-blob: 60% 40% 55% 45% / 45% 55% 40% 60%;
+            --radius-blob2: 40% 60% 50% 50% / 55% 40% 60% 45%;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--deep-purple);
+            color: var(--dark-text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            padding: 20px;
+        }
+
+        /* Background blobs and shapes */
+        .blob {
+            position: absolute;
+            pointer-events: none;
+            z-index: 0;
+            animation: floatBlob 8s ease-in-out infinite;
+        }
+        .blob-pink {
+            background: var(--hot-pink);
+            opacity: 0.35;
+            border-radius: var(--radius-blob);
+            width: 280px;
+            height: 260px;
+            filter: blur(2px);
+            top: -80px;
+            left: -60px;
+        }
+        .blob-lime {
+            background: var(--lime);
+            opacity: 0.45;
+            border-radius: var(--radius-blob2);
+            width: 220px;
+            height: 220px;
+            filter: blur(1px);
+            bottom: -70px;
+            right: -40px;
+            animation-delay: 2s;
+        }
+        .blob-blue {
+            background: var(--sky-blue);
+            opacity: 0.3;
+            border-radius: var(--radius-blob);
+            width: 180px;
+            height: 190px;
+            filter: blur(2px);
+            top: 20%;
+            right: 10%;
+            animation-delay: 4s;
+        }
+        .dot-circle {
+            position: absolute;
+            pointer-events: none;
+            border-radius: 50%;
+            z-index: 0;
+            animation: floatDot 6s ease-in-out infinite;
+        }
+        .dot-1 {
+            width: 18px;
+            height: 18px;
+            background: var(--lime);
+            top: 15%;
+            left: 8%;
+        }
+        .dot-2 {
+            width: 32px;
+            height: 32px;
+            background: var(--hot-pink);
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 2s;
+        }
+        .dot-3 {
+            width: 50px;
+            height: 50px;
+            background: var(--bright-orange);
+            top: 40%;
+            right: 5%;
+            animation-delay: 4s;
+        }
+
+        @keyframes floatBlob {
+            0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            25% { transform: translate(12px, -18px) rotate(2deg) scale(1.04); }
+            50% { transform: translate(-8px, 14px) rotate(-3deg) scale(0.96); }
+            75% { transform: translate(-14px, -8px) rotate(1deg) scale(1.02); }
+        }
+        @keyframes floatDot {
+            0%, 100% { transform: translateY(0) scale(1); }
+            33% { transform: translateY(-16px) scale(1.15); }
+            66% { transform: translateY(10px) scale(0.9); }
+        }
+
+        /* Login card */
+        .login-card {
+            position: relative;
+            z-index: 2;
+            background: var(--off-white);
+            border-radius: var(--radius-lg);
+            padding: 40px 36px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.85); }
+            70% { transform: scale(1.03); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 24px;
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--deep-purple);
+            letter-spacing: 0.04em;
+        }
+        .login-logo span {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: var(--lime);
+            border-radius: 50%;
+            margin-left: 2px;
+            animation: pulse 2s infinite;
+            vertical-align: middle;
+            position: relative;
+            top: -8px;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.4); }
+        }
+        .login-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 28px;
+            font-size: 0.95rem;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--deep-purple);
+            font-size: 0.9rem;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e0dce8;
+            border-radius: 50px;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            transition: all var(--transition-smooth);
+            background: #fff;
+        }
+        .form-group input:focus {
+            border-color: var(--vibrant-purple);
+            box-shadow: 0 0 0 4px rgba(103, 55, 199, 0.1);
+            outline: none;
+        }
+        .login-btn {
+            width: 100%;
+            background: var(--lime);
+            color: var(--deep-purple);
+            font-weight: 700;
+            padding: 16px;
+            border-radius: 50px;
+            font-size: 1.05rem;
+            letter-spacing: 0.01em;
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+            margin-top: 8px;
+        }
+        .login-btn:hover {
+            background: #ddf030;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(201, 242, 39, 0.4);
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: var(--vibrant-purple);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: color var(--transition-smooth);
+        }
+        .back-link:hover {
+            color: var(--deep-purple);
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 30px 20px;
+            }
+            .login-logo {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Decorative shapes -->
+    <div class="blob blob-pink"></div>
+    <div class="blob blob-lime"></div>
+    <div class="blob blob-blue"></div>
+    <div class="dot-circle dot-1"></div>
+    <div class="dot-circle dot-2"></div>
+    <div class="dot-circle dot-3"></div>
+
+    <!-- Login card -->
+    <div class="login-card">
+        <div class="login-logo">TOSO<span></span></div>
+        <p class="login-subtitle">Sign in to access your dashboard</p>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="login-btn">Log In <i class="fa-solid fa-arrow-right"></i></button>
+        </form>
+    </div>
+
+   <script>
+
+    const API_BASE =
+        "http://localhost:5000/api";
+
+
+    // ========================================
+    // CHECK EXISTING ADMIN SESSION
+    // ========================================
+
+    async function checkExistingAdminSession() {
+
+        const token =
+            sessionStorage.getItem(
+                "tosoAdminToken"
+            );
+
+        if (!token) {
+            return;
+        }
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API_BASE}/admin/me`,
+                    {
+                        headers: {
+                            Authorization:
+                                `Bearer ${token}`
+                        }
+                    }
+                );
+
+            const result =
+                await response.json();
+
+            if (
+                response.ok &&
+                result.success
+            ) {
+
+                window.location.replace(
+                    "dashboard.html"
+                );
+
+                return;
+            }
+
+
+            // Invalid session
+            sessionStorage.removeItem(
+                "tosoAdminToken"
+            );
+
+            sessionStorage.removeItem(
+                "tosoAdmin"
+            );
+
+        } catch (error) {
+
+            console.error(
+                "❌ Admin session check failed:",
+                error
+            );
+
+            sessionStorage.removeItem(
+                "tosoAdminToken"
+            );
+
+            sessionStorage.removeItem(
+                "tosoAdmin"
+            );
+        }
+    }
+
+
+    // ========================================
+    // LOGIN
+    // ========================================
+
+    document
+        .getElementById("loginForm")
+        .addEventListener(
+            "submit",
+            async function (e) {
+
+                e.preventDefault();
+
+
+                const username =
+                    document
+                        .getElementById("username")
+                        .value
+                        .trim();
+
+                const password =
+                    document
+                        .getElementById("password")
+                        .value;
+
+
+                if (
+                    !username ||
+                    !password
+                ) {
+
+                    alert(
+                        "Please enter your username and password."
+                    );
+
+                    return;
+                }
+
+
+                const loginButton =
+                    this.querySelector(
+                        ".login-btn"
+                    );
+
+                const originalHTML =
+                    loginButton.innerHTML;
+
+
+                try {
+
+                    loginButton.disabled =
+                        true;
+
+                    loginButton.innerHTML = `
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        Logging in...
+                    `;
+
+
+                    const response =
+                        await fetch(
+                            `${API_BASE}/admin/login`,
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify({
+                                        username,
+                                        password
+                                    })
+                            }
+                        );
+
+
+                    const result =
+                        await response.json();
+
+
+                    if (
+                        !response.ok ||
+                        !result.success
+                    ) {
+
+                        throw new Error(
+                            result.message ||
+                            "Login failed."
+                        );
+                    }
+
+
+                    // ========================================
+                    // TAB-ONLY SESSION
+                    // ========================================
+
+                    sessionStorage.setItem(
+                        "tosoAdminToken",
+                        result.token
+                    );
+
+                    sessionStorage.setItem(
+                        "tosoAdmin",
+                        JSON.stringify(
+                            result.admin
+                        )
+                    );
+
+
+                    // ========================================
+                    // OPEN DASHBOARD
+                    // ========================================
+
+                    window.location.replace(
+                        "dashboard.html"
+                    );
+
+
+                } catch (error) {
+
+                    console.error(
+                        "❌ Admin login error:",
+                        error
+                    );
+
+                    alert(
+                        error.message ||
+                        "Unable to login."
+                    );
+
+                    loginButton.disabled =
+                        false;
+
+                    loginButton.innerHTML =
+                        originalHTML;
+                }
+
+            }
+        );
+
+
+    // ========================================
+    // RUN SESSION CHECK
+    // ========================================
+
+    checkExistingAdminSession();
+
+</script>
+</body>
+</html>
