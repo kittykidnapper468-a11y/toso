@@ -4785,12 +4785,17 @@ window._tosoCancelOrder = async function(orderNumber) {
     ${(order.items || []).map(item => {
 
         const menuItem = menuData.find(
-            product => String(product.id) === String(item.productId)
-        );
+    product => String(product.id) === String(item.productId)
+);
 
-        const itemImage =
-            menuItem?.image ||
-            'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop';
+const specialItem = specialsData.find(
+    special => String(special.id) === String(item.productId)
+);
+
+const itemImage =
+    menuItem?.image ||
+    specialItem?.image ||
+    'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop';
 
         return `
             <div class="order-item-row">
